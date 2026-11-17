@@ -5,13 +5,19 @@ for path in io.popen("find Bronzetongue/Voices -name '*.lua' | sort"):lines() do
 end
 local BT = Harness.load(files)
 
-local REQUIRED = { "gnome", "mage", "bloodsail" }
+local REQUIRED = { "gnome", "mage", "bloodsail",
+  "human", "dwarf", "nightelf", "orc", "troll", "tauren", "forsaken",
+  "warrior", "paladin", "hunter", "rogue", "priest", "shaman", "warlock", "druid",
+  "goblin", "defias", "scarlet", "ventureco", "murloc", "kobold", "ogre", "gnoll",
+  "darkiron", "argentdawn", "cenarion", "timbermaw", "centaur", "naga", "zandalar" }
 
 local function each(fn) for id, voice in pairs(BT.voices) do fn(id, voice) end end
 local function count(t, pred) local n = 0 for k, v in pairs(t) do if not pred or pred(k, v) then n = n + 1 end end return n end
 
 function test_required_voices_exist()
-  for _, id in ipairs(REQUIRED) do assert(BT.voices[id], "missing voice " .. id) end
+  local missing = {}
+  for _, id in ipairs(REQUIRED) do if not BT.voices[id] then missing[#missing + 1] = id end end
+  assert(#missing == 0, "missing voices: " .. table.concat(missing, ", "))
 end
 function test_swap_counts()
   each(function(id, v)
