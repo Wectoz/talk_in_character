@@ -1,6 +1,6 @@
 local ADDON, BT = ...
 
--- The settings panel (Game Menu > Options > AddOns > Bronzetongue), drawn in Forever's bronze.
+-- The settings panel (Game Menu > Options > AddOns > Talk in Character), drawn in Forever's bronze.
 
 local COLOR = {
   bg = { 0.067, 0.067, 0.067 },        -- #111111
@@ -13,7 +13,7 @@ local COLOR = {
   muted = { 0.667, 0.667, 0.667 },     -- #aaaaaa
 }
 local WHITE = "Interface\\Buttons\\WHITE8X8"
-local WHEEL_COMMAND = "BRONZETONGUE_WHEEL"
+local WHEEL_COMMAND = "TALKINCHARACTER_WHEEL"
 local SAMPLE = "hello, can you help me kill this boss?"
 
 local CHAT_LABELS = {
@@ -474,10 +474,10 @@ function BT.BuildOptions()
   panel:Hide()
   Surface(panel, COLOR.bg, COLOR.bronze)
 
-  local title = Label(panel, "Bronzetongue", COLOR.gold, "GameFontNormalLarge")
+  local title = Label(panel, "Talk in Character", COLOR.gold, "GameFontNormalLarge")
   title:SetPoint("TOPLEFT", 46, -14)
   local mark = panel:CreateTexture(nil, "ARTWORK")
-  mark:SetTexture("Interface\\AddOns\\Bronzetongue\\Media\\infinity")
+  mark:SetTexture("Interface\\AddOns\\TalkInCharacter\\Media\\infinity")
   mark:SetSize(24, 12)
   mark:SetPoint("RIGHT", title, "LEFT", -6, 0)
   local getMetadata = C_AddOns and C_AddOns.GetAddOnMetadata
@@ -494,10 +494,10 @@ function BT.BuildOptions()
   panel:SetScript("OnHide", ClosePopup)
 
   if Settings and Settings.RegisterCanvasLayoutCategory then
-    category = Settings.RegisterCanvasLayoutCategory(panel, "Bronzetongue")
+    category = Settings.RegisterCanvasLayoutCategory(panel, "Talk in Character")
     Settings.RegisterAddOnCategory(category)
   elseif InterfaceOptions_AddCategory then
-    panel.name = "Bronzetongue"
+    panel.name = "Talk in Character"
     InterfaceOptions_AddCategory(panel)
   end
 end

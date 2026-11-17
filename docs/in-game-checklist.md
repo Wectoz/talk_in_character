@@ -1,10 +1,10 @@
-# Bronzetongue: in-game checklist
+# Talk in Character: in-game checklist
 
 None of this has been checked in the game yet. Run `tools/sync.sh`, start Forever (or `/reload`),
 and work down the list. Note anything that fails.
 
 1. **Build number.** `/run print(select(4, GetBuildInfo()))` prints `16001`. If not, tell me the number.
-2. **Loads cleanly.** No error in BugSack. `/bronze` opens the panel. Every control works and its
+2. **Loads cleanly.** No error in BugSack. `/tic` opens the panel. Every control works and its
    setting survives `/reload`.
 3. **Panel look.** Bronze edges, the infinity mark by the title, dropdown rows with icons. Note any
    voice whose icon shows as a green square.

@@ -2,8 +2,8 @@ local ADDON, BT = ...
 
 -- The phrase wheel: hold the bound key, flick toward a slot, release to say a line.
 
-BINDING_HEADER_BRONZETONGUE = "Bronzetongue"
-BINDING_NAME_BRONZETONGUE_WHEEL = "Hold for phrase wheel"
+BINDING_HEADER_TALKINCHARACTER = "Talk in Character"
+BINDING_NAME_TALKINCHARACTER_WHEEL = "Hold for phrase wheel"
 
 local LABELS = { hello = "Hello", follow = "Follow", wait = "Wait", cheer = "Cheer", battle = "Battle", bye = "Bye", help = "Help", thanks = "Thanks" }
 local WHEEL_CHATS = { SAY = true, YELL = true, EMOTE = true, PARTY = true, RAID = true, GUILD = true }
@@ -65,7 +65,7 @@ local function Build()
   Circle(frame, "BACKGROUND", 3, INNER * 2 - 3, 0.051, 0.043, 0.031, 1)
   frame.glow = Circle(frame, "BORDER", 0, 52, 0.725, 0.541, 0.243, 1)       -- behind the picked label
   frame.mark = frame:CreateTexture(nil, "ARTWORK")
-  frame.mark:SetTexture("Interface\\AddOns\\Bronzetongue\\Media\\infinity")
+  frame.mark:SetTexture("Interface\\AddOns\\TalkInCharacter\\Media\\infinity")
   frame.mark:SetSize(32, 16)
   frame.mark:SetPoint("CENTER")
   frame.labels = {}
@@ -135,7 +135,7 @@ local function Open()
   local db = BT.db
   if not db or not db.wheel or BT.InLockdown() then return end
   if not BT.voices[db.race or false] and not BT.voices[db.class or false] then
-    BT.Print("Pick a voice in /bronze first.")
+    BT.Print("Pick a voice in /tic first.")
     return
   end
   if not frame then Build() end
@@ -157,7 +157,7 @@ local function Close()
   if line and not BT.InLockdown() then BT.WheelSay(line) end
 end
 
-function BronzetongueWheel_OnKey(keystate)
+function TalkInCharacterWheel_OnKey(keystate)
   local ok, problem = pcall(keystate == "down" and Open or Close)
   if not ok then
     BT.wheelOpen = false

@@ -1,12 +1,12 @@
 -- Loads addon files outside the game: each file gets the (addonName, namespace) varargs.
 Harness = {}
-local ROOT = "Bronzetongue/"
+local ROOT = "TalkInCharacter/"
 
 function Harness.load(files, BT)
   BT = BT or {}
   for _, file in ipairs(files) do
     local chunk = assert(loadfile(ROOT .. file))
-    chunk("Bronzetongue", BT)
+    chunk("TalkInCharacter", BT)
   end
   return BT
 end

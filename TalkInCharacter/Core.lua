@@ -35,7 +35,7 @@ function BT.ApplyDefaults(db)
 end
 
 function BT.Print(message)
-  if DEFAULT_CHAT_FRAME then DEFAULT_CHAT_FRAME:AddMessage("|cffc9ad6aBronzetongue:|r " .. tostring(message)) end
+  if DEFAULT_CHAT_FRAME then DEFAULT_CHAT_FRAME:AddMessage("|cffc9ad6aTalk in Character:|r " .. tostring(message)) end
 end
 
 --- Sets the voice from the character's own race and class. Unknown ones become "None".
@@ -54,16 +54,16 @@ frame:RegisterEvent("PLAYER_LOGIN")
 frame:SetScript("OnEvent", function(_, event, name)
   if event == "ADDON_LOADED" then
     if name ~= ADDON then return end
-    if type(BronzetongueCharDB) ~= "table" then BronzetongueCharDB = {} end
-    BT.db = BT.ApplyDefaults(BronzetongueCharDB)
+    if type(TalkInCharacterCharDB) ~= "table" then TalkInCharacterCharDB = {} end
+    BT.db = BT.ApplyDefaults(TalkInCharacterCharDB)
   elseif event == "PLAYER_LOGIN" and BT.db and not BT.db.matched then
     BT.MatchCharacter()
     BT.db.matched = true
   end
 end)
 
-SLASH_BRONZETONGUE1, SLASH_BRONZETONGUE2 = "/bronzetongue", "/bronze"
-SlashCmdList.BRONZETONGUE = function(input)
+SLASH_TALKINCHARACTER1, SLASH_TALKINCHARACTER2 = "/talkincharacter", "/tic"
+SlashCmdList.TALKINCHARACTER = function(input)
   local verb = (input or ""):lower():match("^%s*(%S*)")
   if verb == "on" or verb == "off" then
     BT.db.enabled = verb == "on"
@@ -71,6 +71,6 @@ SlashCmdList.BRONZETONGUE = function(input)
   elseif BT.OpenOptions then
     BT.OpenOptions()
   else
-    BT.Print("/bronze on, /bronze off")
+    BT.Print("/tic on, /tic off")
   end
 end

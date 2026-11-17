@@ -1,11 +1,11 @@
 ## Interface: 16001
-## Title: Bronzetongue
-## Notes: Speak like your race, faction and class. /bronze for options.
+## Title: Talk in Character
+## Notes: Speak like your race, faction and class. /tic for options.
 ## Author:
 ## Version: 1.0.0
 ## OptionalDeps: AutocorrectForever
-## SavedVariablesPerCharacter: BronzetongueCharDB
-## IconTexture: Interface\AddOns\Bronzetongue\Media\icon
+## SavedVariablesPerCharacter: TalkInCharacterCharDB
+## IconTexture: Interface\AddOns\TalkInCharacter\Media\icon
 
 Core.lua
 Engine\Protect.lua

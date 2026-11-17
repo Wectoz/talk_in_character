@@ -2,7 +2,7 @@ dofile("tests/stubs.lua")
 local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
   "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua", "Options.lua" })
 dofile("tests/testvoices.lua")(BT)
-Stub.Event("ADDON_LOADED", "Bronzetongue")
+Stub.Event("ADDON_LOADED", "TalkInCharacter")
 BT.db.race, BT.db.class, BT.db.strength, BT.db.matched = "t_race", nil, 1, true
 
 local function send(text, chatType)
@@ -12,7 +12,7 @@ local function send(text, chatType)
 end
 
 function test_addon_loaded_creates_saved_settings()
-  assert(BronzetongueCharDB == BT.db and BT.db.enabled == true and BT.db.chats.SAY == true and BT.db.chats.OFFICER == false) end
+  assert(TalkInCharacterCharDB == BT.db and BT.db.enabled == true and BT.db.chats.SAY == true and BT.db.chats.OFFICER == false) end
 function test_other_addon_loading_is_ignored()
   local before = BT.db Stub.Event("ADDON_LOADED", "SomethingElse") assert(BT.db == before) end
 function test_say_rewritten()        assert(send("hello", "SAY") == "ahoy") end
@@ -77,16 +77,16 @@ function test_first_login_matches_character_once()
   BT.db.race = nil Stub.Event("PLAYER_LOGIN") assert(BT.db.race == nil)
   BT.db.race = "t_race" end
 function test_slash_on_off()
-  SlashCmdList.BRONZETONGUE("off") assert(BT.db.enabled == false)
-  SlashCmdList.BRONZETONGUE(" ON ") assert(BT.db.enabled == true)
-  assert(SLASH_BRONZETONGUE1 == "/bronzetongue" and SLASH_BRONZETONGUE2 == "/bronze") end
+  SlashCmdList.TALKINCHARACTER("off") assert(BT.db.enabled == false)
+  SlashCmdList.TALKINCHARACTER(" ON ") assert(BT.db.enabled == true)
+  assert(SLASH_TALKINCHARACTER1 == "/talkincharacter" and SLASH_TALKINCHARACTER2 == "/tic") end
 function test_toc_lists_every_lua_file()
   local listed = {}
-  for line in io.lines("Bronzetongue/Bronzetongue.toc") do
+  for line in io.lines("TalkInCharacter/TalkInCharacter.toc") do
     if line:find("%.lua%s*$") then listed[line:gsub("\\", "/"):gsub("%s+$", "")] = true end
   end
-  for path in io.popen("find Bronzetongue -name '*.lua'"):lines() do
-    local rel = path:gsub("^Bronzetongue/", "")
+  for path in io.popen("find TalkInCharacter -name '*.lua'"):lines() do
+    local rel = path:gsub("^TalkInCharacter/", "")
     assert(listed[rel], "not in TOC: " .. rel) listed[rel] = nil
   end
   assert(next(listed) == nil, "TOC lists a missing file: " .. tostring(next(listed))) end
@@ -142,19 +142,19 @@ function test_wheelsay_never_opens_the_chat_box()
   resetWheel() BT.db.wheelToBox = true BT.WheelSay("hello") BT.db.wheelToBox = nil
   assert(Stub.opened == nil and Stub.sent[1] == "hello") resetWheel() end
 function test_wheel_closed_in_lockdown()
-  resetWheel() Stub.lockdown = true BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) Stub.lockdown = false BronzetongueWheel_OnKey("up") end
+  resetWheel() Stub.lockdown = true TalkInCharacterWheel_OnKey("down") assert(not BT.wheelOpen) Stub.lockdown = false TalkInCharacterWheel_OnKey("up") end
 function test_wheel_off_setting()
-  resetWheel() BT.db.wheel = false BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.wheel = true BronzetongueWheel_OnKey("up") end
+  resetWheel() BT.db.wheel = false TalkInCharacterWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.wheel = true TalkInCharacterWheel_OnKey("up") end
 function test_wheel_no_voice()
-  resetWheel() BT.db.race, BT.db.class = nil, nil BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.race = "t_race" BronzetongueWheel_OnKey("up") end
+  resetWheel() BT.db.race, BT.db.class = nil, nil TalkInCharacterWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.race = "t_race" TalkInCharacterWheel_OnKey("up") end
 function test_wheel_up_without_slot_sends_nothing()
-  resetWheel() BronzetongueWheel_OnKey("down") assert(BT.wheelOpen) BronzetongueWheel_OnKey("up") assert(Stub.sent == nil and not BT.wheelOpen) end
+  resetWheel() TalkInCharacterWheel_OnKey("down") assert(BT.wheelOpen) TalkInCharacterWheel_OnKey("up") assert(Stub.sent == nil and not BT.wheelOpen) end
 function test_wheel_flick_up_says_a_hello_line()
-  resetWheel() BronzetongueWheel_OnKey("down") Stub.cursorY = 560 BronzetongueWheel_OnKey("up")
+  resetWheel() TalkInCharacterWheel_OnKey("down") Stub.cursorY = 560 TalkInCharacterWheel_OnKey("up")
   assert(Stub.sent and (Stub.sent[1] == "a." or Stub.sent[1] == "b." or Stub.sent[1] == "c.") and Stub.sent[2] == "SAY") resetWheel() end
-function test_wheel_up_without_down_is_harmless() resetWheel() BronzetongueWheel_OnKey("up") assert(Stub.sent == nil) end
+function test_wheel_up_without_down_is_harmless() resetWheel() TalkInCharacterWheel_OnKey("up") assert(Stub.sent == nil) end
 function test_wheel_lockdown_starting_while_open_sends_nothing()
-  resetWheel() BronzetongueWheel_OnKey("down") Stub.cursorY = 560 Stub.lockdown = true BronzetongueWheel_OnKey("up")
+  resetWheel() TalkInCharacterWheel_OnKey("down") Stub.cursorY = 560 Stub.lockdown = true TalkInCharacterWheel_OnKey("up")
   Stub.lockdown = false assert(Stub.sent == nil) resetWheel() end
 function test_wheel_target_secret_is_nil()
   Stub.targetName = "Thrall" Stub.targetSecret = true assert(BT.WheelTarget() == nil) Stub.targetSecret = false Stub.targetName = nil end
@@ -163,17 +163,17 @@ function test_wheel_target_name()
 
 -- Options (the panel itself is checked in game; these cover the logic around it)
 function test_options_build_registers_category()
-  BT.BuildOptions() assert(Stub.categoryName == "Bronzetongue" and Stub.registered ~= nil) end
+  BT.BuildOptions() assert(Stub.categoryName == "Talk in Character" and Stub.registered ~= nil) end
 function test_open_options()
   BT.BuildOptions() Stub.openedCategory = nil BT.OpenOptions() assert(Stub.openedCategory == 7) end
 function test_open_options_waits_for_combat_to_end()
   BT.BuildOptions() Stub.openedCategory = nil Stub.combat = true BT.OpenOptions() Stub.combat = false assert(Stub.openedCategory == nil) end
 function test_slash_without_argument_opens_options()
-  BT.BuildOptions() Stub.openedCategory = nil SlashCmdList.BRONZETONGUE("") assert(Stub.openedCategory == 7) end
+  BT.BuildOptions() Stub.openedCategory = nil SlashCmdList.TALKINCHARACTER("") assert(Stub.openedCategory == 7) end
 function test_bind_wheel_key_replaces_old_key()
   Stub.bindings, Stub.boundKey, Stub.bindingsSaved = {}, "F5", false
   assert(BT.BindWheelKey("ALT-G") == true)
-  assert(Stub.bindings["F5"] == false and Stub.bindings["ALT-G"] == "BRONZETONGUE_WHEEL" and Stub.bindingsSaved)
+  assert(Stub.bindings["F5"] == false and Stub.bindings["ALT-G"] == "TALKINCHARACTER_WHEEL" and Stub.bindingsSaved)
   Stub.boundKey = nil end
 function test_bind_wheel_key_clear()
   Stub.bindings, Stub.boundKey = {}, "F5" assert(BT.BindWheelKey(nil) == true and Stub.bindings["F5"] == false) Stub.boundKey = nil end
@@ -207,8 +207,8 @@ function test_bind_wheel_key_refuses_a_key_in_use()
   Stub.bindings, Stub.boundKey, Stub.actions, Stub.prints = {}, nil, { G = "TOGGLEGUILDTAB" }, 0
   assert(BT.BindWheelKey("G") == false and next(Stub.bindings) == nil and Stub.prints == 1) Stub.actions = nil end
 function test_bind_wheel_key_allows_its_own_key_again()
-  Stub.bindings, Stub.boundKey, Stub.actions = {}, "G", { G = "BRONZETONGUE_WHEEL" }
-  assert(BT.BindWheelKey("G") == true and Stub.bindings.G == "BRONZETONGUE_WHEEL") Stub.actions, Stub.boundKey = nil, nil end
+  Stub.bindings, Stub.boundKey, Stub.actions = {}, "G", { G = "TALKINCHARACTER_WHEEL" }
+  assert(BT.BindWheelKey("G") == true and Stub.bindings.G == "TALKINCHARACTER_WHEEL") Stub.actions, Stub.boundKey = nil, nil end
 function test_bind_wheel_key_reports_a_failed_bind()
   Stub.bindings, Stub.bindFails, Stub.prints = {}, true, 0
   assert(BT.BindWheelKey("G") == false and Stub.prints == 1) Stub.bindFails = nil end

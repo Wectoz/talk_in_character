@@ -1,7 +1,7 @@
 -- Every shipped voice loads (so it validates) and meets the quality bar.
 local files = { "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua" }
-for path in io.popen("find Bronzetongue/Voices -name '*.lua' | sort"):lines() do
-  files[#files + 1] = path:gsub("^Bronzetongue/", "")
+for path in io.popen("find TalkInCharacter/Voices -name '*.lua' | sort"):lines() do
+  files[#files + 1] = path:gsub("^TalkInCharacter/", "")
 end
 local BT = Harness.load(files)
 

@@ -81,7 +81,7 @@ function BT.Rewrite(text, chatType, opts)
   if ok and type(result) == "string" then return result end
   if not reported then
     reported = true
-    BT.Print("something went wrong, so your message was left as typed (" .. tostring(result) .. "). /bronze off stops me.")
+    BT.Print("something went wrong, so your message was left as typed (" .. tostring(result) .. "). /tic off stops me.")
   end
   return text
 end

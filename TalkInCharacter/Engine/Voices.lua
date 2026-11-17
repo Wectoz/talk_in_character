@@ -81,8 +81,8 @@ end
 
 function BT.RegisterVoice(voice)
   local ok, problem = BT.ValidateVoice(voice)
-  if not ok then error("Bronzetongue voice rejected: " .. tostring(problem), 2) end
-  if BT.voices[voice.id] then error("Bronzetongue voice registered twice: " .. voice.id, 2) end
+  if not ok then error("Talk in Character voice rejected: " .. tostring(problem), 2) end
+  if BT.voices[voice.id] then error("Talk in Character voice registered twice: " .. voice.id, 2) end
   BT.voices[voice.id] = voice
 end
 

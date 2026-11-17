@@ -1,6 +1,6 @@
-# Bronzetongue
+# Talk in Character
 
-**Speak like your race, your faction and your class.** Type normally; Bronzetongue rewrites your chat in the voice you pick. A gnome mage sounds clever. A Bloodsail buccaneer sounds like one. A kobold wants you to leave the candle alone.
+**Speak like your race, your faction and your class.** Type normally; Talk in Character rewrites your chat in the voice you pick. A gnome mage sounds clever. A Bloodsail buccaneer sounds like one. A kobold wants you to leave the candle alone.
 
 For WoW: Forever.
 
@@ -14,13 +14,13 @@ For WoW: Forever.
 - **Live preview.** A line above the chat box shows what will be sent while you type.
 - **You choose where it applies.** A switch for each chat type: say, yell, emote, party, raid, guild, officer, whisper, instance, channels.
 - **Each character remembers its own voice.**
-- **Works with Autocorrect Forever.** If you have it installed, your spelling is fixed first and then voiced, and you can switch it on and off from Bronzetongue's panel.
+- **Works with Autocorrect Forever.** If you have it installed, your spelling is fixed first and then voiced, and you can switch it on and off from Talk in Character's panel.
 
-Open the options with `/bronze` (or `/bronzetongue`). `/bronze off` and `/bronze on` switch it quickly.
+Open the options with `/tic` (or `/talkincharacter`). `/tic off` and `/tic on` switch it quickly.
 
 ## Good to know
 
-- **Boss encounters:** the game restricts chat addons during boss encounters and similar content. Bronzetongue does nothing then, so your messages always go out.
+- **Boss encounters:** the game restricts chat addons during boss encounters and similar content. Talk in Character does nothing then, so your messages always go out.
 - **Send one message as typed:** hold Ctrl while pressing Enter.
 - **Emotes:** in `/e`, only what you put in "quotes" is voiced, so the narration stays plain.
 - **Battle.net whispers are never changed.**

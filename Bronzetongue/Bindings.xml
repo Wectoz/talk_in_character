@@ -1,5 +1,0 @@
-<Bindings>
-	<Binding name="BRONZETONGUE_WHEEL" header="BRONZETONGUE" category="ADDONS" runOnUp="true">
-		BronzetongueWheel_OnKey(keystate)
-	</Binding>
-</Bindings>

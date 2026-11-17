@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Draws the Bronzetongue icon: Forever's infinity mark in a bronze speech bubble.
+"""Draws the Talk in Character icon: Forever's infinity mark in a bronze speech bubble.
 
 No image library is needed: shapes are signed distance functions, written out as PNG and TGA
 with the standard library.  Run from the repo root:  python3 tools/make_icon.py
-Outputs: curseforge/icon-400.png, Bronzetongue/Media/icon.tga (64x64),
-         Bronzetongue/Media/infinity.tga (64x32, transparent, for the wheel and the panel).
+Outputs: curseforge/icon-400.png, TalkInCharacter/Media/icon.tga (64x64),
+         TalkInCharacter/Media/infinity.tga (64x32, transparent, for the wheel and the panel).
 """
 import math
 import os
@@ -162,10 +162,10 @@ def write_tga(path, rows):
 
 if __name__ == "__main__":
     os.makedirs("curseforge", exist_ok=True)
-    os.makedirs("Bronzetongue/Media", exist_ok=True)
+    os.makedirs("TalkInCharacter/Media", exist_ok=True)
     write_png("curseforge/icon-400.png", render_icon(400))
     small = render_icon(64)
-    write_tga("Bronzetongue/Media/icon.tga", small)
+    write_tga("TalkInCharacter/Media/icon.tga", small)
     mark = render_mark(64, 32)
-    write_tga("Bronzetongue/Media/infinity.tga", mark)
-    print("wrote curseforge/icon-400.png, Bronzetongue/Media/icon.tga, Bronzetongue/Media/infinity.tga")
+    write_tga("TalkInCharacter/Media/infinity.tga", mark)
+    print("wrote curseforge/icon-400.png, TalkInCharacter/Media/icon.tga, TalkInCharacter/Media/infinity.tga")

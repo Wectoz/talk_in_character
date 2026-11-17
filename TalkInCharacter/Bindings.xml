@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="TALKINCHARACTER_WHEEL" header="TALKINCHARACTER" category="ADDONS" runOnUp="true">
+		TalkInCharacterWheel_OnKey(keystate)
+	</Binding>
+</Bindings>

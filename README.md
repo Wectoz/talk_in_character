@@ -1,24 +1,24 @@
-# Bronzetongue
+# Talk in Character
 
 A WoW: Forever addon that rewrites your chat in the voice of a race or faction and a class.
 See `curseforge/description.md` for the player-facing description.
 
 ## Layout
 
-- `Bronzetongue/` the addon. This folder is what ships.
+- `TalkInCharacter/` the addon. This folder is what ships.
 - `tests/` tests that run outside the game: `lua5.1 tests/run.lua`
 - `tools/sync.sh` copies the addon into the Forever AddOns folder.
 - `tools/gen_toc.sh` rewrites the file list in the TOC. Run it after adding a voice file.
 - `tools/make_icon.py` draws the icon files.
-- `tools/package.py` builds `dist/Bronzetongue-<version>.zip` for CurseForge.
+- `tools/package.py` builds `dist/TalkInCharacter-<version>.zip` for CurseForge.
 - `docs/in-game-checklist.md` what to check in the game before releasing.
 
 ## Adding a voice
 
-Copy a file under `Bronzetongue/Voices/`, change the `id`, write the voice, run
+Copy a file under `TalkInCharacter/Voices/`, change the `id`, write the voice, run
 `tools/gen_toc.sh` and `lua5.1 tests/run.lua`. The tests say what a voice needs. To make
 "Match my character" pick it for a playable race, add the race's file token to `RACE_TOKENS`
-in `Bronzetongue/Core.lua`.
+in `TalkInCharacter/Core.lua`.
 
 ## To check in game
 
