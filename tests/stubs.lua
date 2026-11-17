@@ -44,6 +44,9 @@ local function Frame()
   function frame:GetEffectiveScale() return 1 end
   function frame:GetWidth() return 400 end
   function frame:GetStringHeight() return 12 end
+  function frame:GetStringWidth() return 60 end
+  function frame:GetHeight() return 20 end
+  function frame:GetID() return 7 end
   return setmetatable(frame, { __index = function(t, key)
     return function(...) return Frame() end
   end })
@@ -58,6 +61,18 @@ end
 UIParent = Frame()
 DEFAULT_CHAT_FRAME = { AddMessage = function(self, text) Stub.printed = text Stub.prints = (Stub.prints or 0) + 1 end }
 SlashCmdList = {}
+function CreateColor() return {} end
+Settings = {
+  RegisterCanvasLayoutCategory = function(panel, name) Stub.categoryName = name return CreateFrame("Frame") end,
+  RegisterAddOnCategory = function(category) Stub.registered = category end,
+  OpenToCategory = function(id) Stub.openedCategory = id end,
+}
+function GetBindingKey() return Stub.boundKey end
+function SetBinding(key, command) Stub.bindings = Stub.bindings or {} Stub.bindings[key] = command or false return true end
+function SaveBindings() Stub.bindingsSaved = true end
+function GetCurrentBindingSet() return 1 end
+function IsControlKeyDown() return false end
+function IsShiftKeyDown() return false end
 ChatFrameUtil = { OpenChat = function(text) Stub.opened = text end }
 
 --- A chat edit box holding `text`, set to `chatType`.

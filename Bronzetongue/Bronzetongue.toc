@@ -51,3 +51,4 @@ Voices\Races\troll.lua
 Send.lua
 Preview.lua
 Wheel.lua
+Options.lua

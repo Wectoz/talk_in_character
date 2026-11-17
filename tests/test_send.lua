@@ -1,6 +1,6 @@
 dofile("tests/stubs.lua")
 local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
-  "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua" })
+  "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua", "Options.lua" })
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "Bronzetongue")
 BT.db.race, BT.db.class, BT.db.strength, BT.db.matched = "t_race", nil, 1, true
@@ -152,3 +152,36 @@ function test_wheel_target_secret_is_nil()
   Stub.targetName = "Thrall" Stub.targetSecret = true assert(BT.WheelTarget() == nil) Stub.targetSecret = false Stub.targetName = nil end
 function test_wheel_target_name()
   Stub.targetName = "Thrall" assert(BT.WheelTarget().name == "Thrall") Stub.targetName = nil assert(BT.WheelTarget() == nil) end
+
+-- Options (the panel itself is checked in game; these cover the logic around it)
+function test_options_build_registers_category()
+  BT.BuildOptions() assert(Stub.categoryName == "Bronzetongue" and Stub.registered ~= nil) end
+function test_open_options()
+  BT.BuildOptions() Stub.openedCategory = nil BT.OpenOptions() assert(Stub.openedCategory == 7) end
+function test_open_options_waits_for_combat_to_end()
+  BT.BuildOptions() Stub.openedCategory = nil Stub.combat = true BT.OpenOptions() Stub.combat = false assert(Stub.openedCategory == nil) end
+function test_slash_without_argument_opens_options()
+  BT.BuildOptions() Stub.openedCategory = nil SlashCmdList.BRONZETONGUE("") assert(Stub.openedCategory == 7) end
+function test_bind_wheel_key_replaces_old_key()
+  Stub.bindings, Stub.boundKey, Stub.bindingsSaved = {}, "F5", false
+  assert(BT.BindWheelKey("ALT-G") == true)
+  assert(Stub.bindings["F5"] == false and Stub.bindings["ALT-G"] == "BRONZETONGUE_WHEEL" and Stub.bindingsSaved)
+  Stub.boundKey = nil end
+function test_bind_wheel_key_clear()
+  Stub.bindings, Stub.boundKey = {}, "F5" assert(BT.BindWheelKey(nil) == true and Stub.bindings["F5"] == false) Stub.boundKey = nil end
+function test_bind_wheel_key_refused_in_combat()
+  Stub.bindings, Stub.combat = {}, true assert(BT.BindWheelKey("G") == false and next(Stub.bindings) == nil) Stub.combat = false end
+function test_key_chord_ignores_bare_modifiers()
+  assert(BT.KeyChord("LSHIFT") == nil and BT.KeyChord("RCTRL") == nil and BT.KeyChord("G") == "G")
+  Stub.alt = true assert(BT.KeyChord("G") == "ALT-G") Stub.alt = false end
+function test_autocorrect_state()
+  _G.AutocorrectForever, _G.AutocorrectForeverDB = nil, nil
+  assert(BT.AutocorrectState() == nil)
+  _G.AutocorrectForever = {} assert(BT.AutocorrectState().enabled == false)
+  _G.AutocorrectForeverDB = { enabled = true, accent = "pirate" }
+  local state = BT.AutocorrectState() assert(state.enabled == true and state.accent == true)
+  _G.AutocorrectForever, _G.AutocorrectForeverDB = nil, nil end
+function test_autocorrect_switch_uses_its_slash_command()
+  local said SlashCmdList.AUTOCORRECTFOREVER = function(msg) said = msg end
+  BT.SetAutocorrect(false) assert(said == "off") BT.SetAutocorrect(true) assert(said == "on")
+  SlashCmdList.AUTOCORRECTFOREVER = nil BT.SetAutocorrect(true) end
