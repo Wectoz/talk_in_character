@@ -68,13 +68,17 @@ end
 
 local function Attempt(text, race, class, opts, strength, random, mood)
   local shielded, parts = BT.Protect.Shield(text, opts.names)
+  -- Words as typed: counted before any swap, and without the words inside a link or a name.
+  -- "xD" is a face, not a word.
+  local words = 0
+  for run in shielded:gmatch("%a%a+") do
+    if run:lower() ~= "xd" then words = words + 1 end
+  end
   -- A run that touches a byte above 127 is someone's own language: left alone.
   shielded = shielded:gsub("[%a'\128-\255]+", function(run)
     if run:find("[\128-\255]") then return run end
     return Word(run, race, class, strength, random)
   end)
-  -- Counted on the shielded text, so the words inside a link or a name do not count.
-  local words = select(2, shielded:gsub("%a%a+", ""))
   if words >= 3 then
     shielded = Interject(shielded, race, strength, random)
     shielded = Interject(shielded, class, strength, random)

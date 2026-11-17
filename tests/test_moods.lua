@@ -52,3 +52,15 @@ function test_wordless_messages_take_no_mood_or_interjection()
 function test_link_words_do_not_count_toward_interjections()
   local L = "|cff0070dd|Hitem:1:::|h[Great Big Sword]|h|r"
   assert(BT.Engine.Speak("see " .. L, { race = "t_race", strength = 3, random = function() return 1 end }) == "see " .. L) end
+
+function test_typed_words_are_counted_before_swaps()
+  local L = "|cff0070dd|Hitem:1:::|h[Sword]|h|r"   -- two typed words; the swap "ahoy there" must not make it three
+  BT.voices.t_race.swaps.hi = { tier = 1, "ahoy there" }
+  local out = BT.Engine.Speak("hi " .. L .. " ok", { race = "t_race", strength = 3, random = function() return 1 end })
+  BT.voices.t_race.swaps.hi = nil
+  assert(out == "ahoy there " .. L .. " ok", out) end
+function test_xd_is_an_emoticon_not_a_word()
+  for _, text in ipairs({ "xD", "XD", "xD xD" }) do
+    assert(BT.Engine.Speak(text, { race = "t_race", strength = 3, mood = "angry", random = function() return 1 end }) == text) end end
+function test_short_words_still_take_a_mood()
+  assert(BT.Engine.Speak("no", { race = "t_race", strength = 1, mood = "angry", random = function() return 99 end }) == "no!") end

@@ -212,3 +212,25 @@ function test_bind_wheel_key_allows_its_own_key_again()
 function test_bind_wheel_key_reports_a_failed_bind()
   Stub.bindings, Stub.bindFails, Stub.prints = {}, true, 0
   assert(BT.BindWheelKey("G") == false and Stub.prints == 1) Stub.bindFails = nil end
+
+-- Second review
+function test_emote_keeps_a_link_with_quotes_in_its_name()
+  local L = '|cff0070dd|Hitem:1:::|h["Hello" Kitty]|h|r'
+  assert(send("holds " .. L .. ' up and says "hello"', "EMOTE") == "holds " .. L .. ' up and says "ahoy"') end
+function test_failed_bind_keeps_the_old_key()
+  Stub.bindings, Stub.boundKey, Stub.bindFails, Stub.prints = {}, "F5", true, 0
+  assert(BT.BindWheelKey("G") == false and Stub.bindings["F5"] == nil)
+  Stub.bindFails, Stub.boundKey = nil, nil end
+function test_refusal_names_the_action_readably()
+  Stub.bindings, Stub.actions, Stub.printed = {}, { G = "CLICK Foo:LeftButton" }, nil
+  GetBindingName = function(action) return "Foo Button" end
+  BT.BindWheelKey("G") assert(Stub.printed:find("Foo Button", 1, true))
+  GetBindingName, Stub.actions = nil, nil end
+function test_preview_does_not_recompute_unchanged_text()
+  local real, calls = BT.Engine.Speak, 0
+  BT.Engine.Speak = function(...) calls = calls + 1 return real(...) end
+  Stub.activeBox = FakeBox("hello", "PARTY")
+  assert(BT.PreviewTick() == "ahoy" and BT.PreviewTick() == "ahoy" and calls == 1)
+  BT.db.strength = 2 assert(BT.PreviewTick() == "ahoy" and calls == 2) BT.db.strength = 1
+  Stub.activeBox.text = "hello you" BT.PreviewTick() assert(calls == 3)
+  BT.Engine.Speak = real Stub.activeBox = nil end

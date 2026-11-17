@@ -47,19 +47,21 @@ function BT.BindWheelKey(key)
   if key and GetBindingAction then
     local action = GetBindingAction(key)
     if type(action) == "string" and action ~= "" and action ~= WHEEL_COMMAND then
-      local name = _G["BINDING_NAME_" .. action] or action
+      local name = (GetBindingName and GetBindingName(action)) or _G["BINDING_NAME_" .. action] or action
       BT.Print(key .. " is already used for \"" .. tostring(name) .. "\". Pick another key, or unbind it in Key Bindings first.")
       return false
     end
   end
   local old = { GetBindingKey(WHEEL_COMMAND) }
-  for _, oldKey in ipairs(old) do SetBinding(oldKey, nil) end
-  local bound = key == nil or SetBinding(key, WHEEL_COMMAND)
-  SaveBindings(GetCurrentBindingSet())
-  if not bound then
+  -- The new key first: if the game refuses it, the old key stays.
+  if key and not SetBinding(key, WHEEL_COMMAND) then
     BT.Print("The game would not bind " .. key .. ". Try another key.")
     return false
   end
+  for _, oldKey in ipairs(old) do
+    if oldKey ~= key then SetBinding(oldKey, nil) end
+  end
+  SaveBindings(GetCurrentBindingSet())
   return true
 end
 

@@ -70,7 +70,12 @@ function BT.Rewrite(text, chatType, opts)
     opts = opts or BT.Options()
     if chatType ~= "EMOTE" then return BT.Engine.Speak(text, opts) end
     -- An emote is narration: only what is said inside "quotes" is in your voice.
-    local spoken = text:gsub('"(.-)"', function(said) return '"' .. BT.Engine.Speak(said, opts) .. '"' end)
+    -- Links are shielded first: an item name can hold a quote of its own.
+    local shielded, parts = BT.Protect.Shield(text)
+    shielded = shielded:gsub('"(.-)"', function(said)
+      return '"' .. BT.Engine.Speak(BT.Protect.Restore(said, parts), opts) .. '"'
+    end)
+    local spoken = BT.Protect.Restore(shielded, parts)
     return #spoken <= 255 and spoken or text
   end)
   if ok and type(result) == "string" then return result end
@@ -84,7 +89,7 @@ end
 local busy = false
 local function OnPreSendText(_, box)
   if busy or type(box) ~= "table" or type(box.GetText) ~= "function" then return end
-  -- Ctrl+Enter: this one goes out as typed. (Alt+Enter is the client's fullscreen toggle.)
+  -- Ctrl+Enter: this one goes out as typed. (Not Alt+Enter, which the client may use to toggle fullscreen.)
   if IsControlKeyDown and IsControlKeyDown() then return end
   local chatType = box.GetAttribute and box:GetAttribute("chatType")
   if not BT.WillRewrite(chatType) then return end

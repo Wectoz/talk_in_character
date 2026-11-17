@@ -70,7 +70,7 @@ Settings = {
 function GetBindingKey() return Stub.boundKey end
 function GetBindingAction(key) return (Stub.actions or {})[key] or "" end
 function GetCVarBool(name) return Stub.cvars and Stub.cvars[name] or false end
-function SetBinding(key, command) if Stub.bindFails then return false end Stub.bindings = Stub.bindings or {} Stub.bindings[key] = command or false return true end
+function SetBinding(key, command) if Stub.bindFails and command then return false end Stub.bindings = Stub.bindings or {} Stub.bindings[key] = command or false return true end
 function SaveBindings() Stub.bindingsSaved = true end
 function GetCurrentBindingSet() return 1 end
 function IsControlKeyDown() return Stub.ctrl or false end

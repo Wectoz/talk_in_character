@@ -38,10 +38,18 @@ end
 
 local function Hide() if frame then frame:Hide() end end
 
+local lastKey, lastSpoken
 local function Update(box)
   local text = box:GetText()
   local chatType = box.GetAttribute and box:GetAttribute("chatType")
+  if not BT.Readable(text) then Hide() return nil end
+  -- Typing pauses far outnumber key presses: work only when the text or a setting changed.
+  local db = BT.db
+  local key = table.concat({ text, tostring(chatType), tostring(db.race), tostring(db.class), db.mood, db.strength,
+    tostring(db.enabled), tostring(db.preview), tostring(db.chats[chatType or ""]), tostring(BT.InLockdown()) }, "\0")
+  if key == lastKey and (lastSpoken == nil or (frame and frame:IsShown())) then return lastSpoken end
   local spoken = BT.PreviewText(text, chatType)
+  lastKey, lastSpoken = key, spoken
   if not spoken then Hide() return nil end
   local f = Frame()
   f:ClearAllPoints()
