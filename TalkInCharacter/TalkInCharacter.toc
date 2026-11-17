@@ -1,7 +1,7 @@
 ## Interface: 16001
 ## Title: Talk in Character
 ## Notes: Speak like your race, faction and class. /tic for options.
-## Author:
+## Author: Wectoz
 ## Version: 1.0.0
 ## OptionalDeps: AutocorrectForever
 ## SavedVariablesPerCharacter: TalkInCharacterCharDB

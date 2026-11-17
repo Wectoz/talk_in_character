@@ -31,4 +31,4 @@ Open the options with `/tic` (or `/talkincharacter`). `/tic off` and `/tic on` s
 
 ## Optional companion
 
-[Autocorrect Forever](https://www.curseforge.com/wow/addons) by Aurelius Drake. Not required.
+Autocorrect Forever by Aurelius Drake. Not required.
