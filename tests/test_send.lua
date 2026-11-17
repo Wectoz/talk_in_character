@@ -1,6 +1,6 @@
 dofile("tests/stubs.lua")
 local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
-  "Engine/Phrases.lua", "Send.lua", "Preview.lua" })
+  "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua" })
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "Bronzetongue")
 BT.db.race, BT.db.class, BT.db.strength, BT.db.matched = "t_race", nil, 1, true
@@ -115,3 +115,40 @@ function test_preview_secret_text_is_ignored()
 function test_send_secret_text_is_left_alone()
   Stub.targetName = "hello" Stub.targetSecret = true local _, box = send("hello", "SAY") assert(box.sets == 0)
   Stub.targetName = nil Stub.targetSecret = false end
+
+-- Wheel
+local function resetWheel() Stub.sent, Stub.opened, Stub.cursorX, Stub.cursorY = nil, nil, 500, 500 BT.db.wheelChat = "SAY" end
+function test_wheelsay_sends_to_chosen_chat()
+  resetWheel() BT.db.wheelChat = "YELL" BT.WheelSay("hi") assert(Stub.sent[1] == "hi" and Stub.sent[2] == "YELL") resetWheel() end
+function test_wheelsay_party_falls_back_to_say()
+  resetWheel() BT.db.wheelChat = "PARTY" Stub.inGroup = false BT.WheelSay("hi") assert(Stub.sent[2] == "SAY") resetWheel() end
+function test_wheelsay_party_when_grouped()
+  resetWheel() BT.db.wheelChat = "PARTY" Stub.inGroup = true BT.WheelSay("hi") assert(Stub.sent[2] == "PARTY") Stub.inGroup = false resetWheel() end
+function test_wheelsay_raid_needs_a_raid()
+  resetWheel() BT.db.wheelChat = "RAID" Stub.inGroup = true Stub.inRaid = false BT.WheelSay("hi") assert(Stub.sent[2] == "SAY") Stub.inGroup = false resetWheel() end
+function test_wheelsay_unknown_chat_falls_back_to_say()
+  resetWheel() BT.db.wheelChat = "CHANNEL" BT.WheelSay("hi") assert(Stub.sent[2] == "SAY") resetWheel() end
+function test_wheelsay_to_box_mode()
+  resetWheel() BT.db.wheelToBox = true BT.WheelSay("hello")
+  assert(Stub.sent == nil and Stub.opened == "hello" and BT.wheelLine == "hello")
+  assert(send("hello", "SAY") == "hello" and BT.wheelLine == nil)
+  BT.db.wheelToBox = false resetWheel() end
+function test_wheel_closed_in_lockdown()
+  resetWheel() Stub.lockdown = true BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) Stub.lockdown = false BronzetongueWheel_OnKey("up") end
+function test_wheel_off_setting()
+  resetWheel() BT.db.wheel = false BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.wheel = true BronzetongueWheel_OnKey("up") end
+function test_wheel_no_voice()
+  resetWheel() BT.db.race, BT.db.class = nil, nil BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) BT.db.race = "t_race" BronzetongueWheel_OnKey("up") end
+function test_wheel_up_without_slot_sends_nothing()
+  resetWheel() BronzetongueWheel_OnKey("down") assert(BT.wheelOpen) BronzetongueWheel_OnKey("up") assert(Stub.sent == nil and not BT.wheelOpen) end
+function test_wheel_flick_up_says_a_hello_line()
+  resetWheel() BronzetongueWheel_OnKey("down") Stub.cursorY = 560 BronzetongueWheel_OnKey("up")
+  assert(Stub.sent and (Stub.sent[1] == "a." or Stub.sent[1] == "b." or Stub.sent[1] == "c.") and Stub.sent[2] == "SAY") resetWheel() end
+function test_wheel_up_without_down_is_harmless() resetWheel() BronzetongueWheel_OnKey("up") assert(Stub.sent == nil) end
+function test_wheel_lockdown_starting_while_open_sends_nothing()
+  resetWheel() BronzetongueWheel_OnKey("down") Stub.cursorY = 560 Stub.lockdown = true BronzetongueWheel_OnKey("up")
+  Stub.lockdown = false assert(Stub.sent == nil) resetWheel() end
+function test_wheel_target_secret_is_nil()
+  Stub.targetName = "Thrall" Stub.targetSecret = true assert(BT.WheelTarget() == nil) Stub.targetSecret = false Stub.targetName = nil end
+function test_wheel_target_name()
+  Stub.targetName = "Thrall" assert(BT.WheelTarget().name == "Thrall") Stub.targetName = nil assert(BT.WheelTarget() == nil) end
