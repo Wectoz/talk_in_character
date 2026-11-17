@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "centaur", name = "Centaur", kind = "faction",
-  icon = "Interface\\Icons\\Ability_Mount_RidingHorse",
+  icon = "Interface\\Icons\\INV_Misc_Head_Centaur_01",
   swaps = {
     -- light: plain English from someone who has never once apologised
     hello = { tier = 1, "hail" },

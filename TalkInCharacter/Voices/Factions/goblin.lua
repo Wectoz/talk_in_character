@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "goblin", name = "Goblin (Steamwheedle)", kind = "faction",
-  icon = "Interface\\Icons\\INV_Misc_Coin_01",
+  icon = "Interface\\Icons\\Achievement_Goblinhead",
   swaps = {
     -- light: a salesman who never stops selling
     hello = { tier = 1, "hey hey", "heya" },

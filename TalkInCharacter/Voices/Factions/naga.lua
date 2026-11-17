@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "naga", name = "Naga", kind = "faction",
-  icon = "Interface\\Icons\\Spell_Frost_SummonWaterElemental",
+  icon = "Interface\\Icons\\Spell_Nature_GuardianWard",
   swaps = {
     -- light: haughty and ancient, no hissing yet
     hello = { tier = 1, "hail" },

@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "zandalar", name = "Zandalar", kind = "faction",
-  icon = "Interface\\Icons\\Ability_Mount_JungleTiger",
+  icon = "Interface\\Icons\\INV_Misc_Head_Troll_01",
   swaps = {
     -- light: regal, formal, no accent yet
     hello = { tier = 1, "greetings" },

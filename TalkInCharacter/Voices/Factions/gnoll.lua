@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "gnoll", name = "Gnoll", kind = "faction",
-  icon = "Interface\\Icons\\INV_Misc_Bone_01",
+  icon = "Interface\\Icons\\INV_Misc_Head_Gnoll_01",
   swaps = {
     -- light: pack talk and a cackle
     hello = { tier = 1, "hyeh, hello" },

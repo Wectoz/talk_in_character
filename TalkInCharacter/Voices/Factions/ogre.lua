@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "ogre", name = "Ogre", kind = "faction",
-  icon = "Interface\\Icons\\Ability_Smash",
+  icon = "Interface\\Icons\\Achievement_Reputation_Ogre",
   swaps = {
     -- light: slow, simple, hungry
     hello = { tier = 1, "uh, hello" },

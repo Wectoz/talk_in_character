@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "scarlet", name = "Scarlet Crusade", kind = "faction",
-  icon = "Interface\\Icons\\Spell_Holy_HolySmite",
+  icon = "Interface\\Icons\\Spell_Holy_Crusade",
   swaps = {
     -- light: a zealot who suspects everyone, including you
     hello = { tier = 1, "hail" },

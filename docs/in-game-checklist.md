@@ -6,8 +6,8 @@ and work down the list. Note anything that fails.
 1. **Build number.** `/run print(select(4, GetBuildInfo()))` prints `16001`. If not, tell me the number.
 2. **Loads cleanly.** No error in BugSack. `/tic` opens the panel. Every control works and its
    setting survives `/reload`.
-3. **Panel look.** Bronze edges, the infinity mark by the title, dropdown rows with icons. Note any
-   voice whose icon shows as a green square.
+3. **Panel look.** Bronze edges, the infinity mark by the title, dropdown rows with icons. All 33 voice
+   icons are confirmed real game icons; note any that still shows as a green square.
 4. **Auto mode.** Say, Yell, Party, Guild and Whisper are voiced. In `/e`, only text in "quotes" is voiced. Officer and Trade are not,
    until ticked.
 5. **Links.** Shift-click an item into a message. The link still works for other players.

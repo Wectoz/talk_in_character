@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "timbermaw", name = "Timbermaw Furbolg", kind = "faction",
-  icon = "Interface\\Icons\\Ability_Racial_BearForm",
+  icon = "Interface\\Icons\\Achievement_Reputation_Timbermaw",
   swaps = {
     -- light: warm, simple, a rumble here and there
     hello = { tier = 1, "rrr, greetings" },

@@ -1,7 +1,7 @@
 local ADDON, BT = ...
 BT.RegisterVoice({
   id = "cenarion", name = "Cenarion Circle", kind = "faction",
-  icon = "Interface\\Icons\\Spell_Nature_HealingTouch",
+  icon = "Interface\\Icons\\Achievement_Reputation_GuardiansofCenarius",
   swaps = {
     -- light: gentle and patient, plain English
     hello = { tier = 1, "be welcome" },
