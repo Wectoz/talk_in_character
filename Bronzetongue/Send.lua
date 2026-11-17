@@ -9,6 +9,10 @@ for _, chatType in ipairs(BT.CHAT_TYPES) do ENABLED_TYPE[chatType] = true end
 
 --- Whether the game has chat under its encounter restrictions. We then change nothing.
 function BT.InLockdown()
+  if GetCVarBool then
+    local ok, forced = pcall(GetCVarBool, "addonChatRestrictionsForced")
+    if ok and forced then return true end
+  end
   local check = C_ChatInfo and C_ChatInfo.InChatMessagingLockdown
   if type(check) ~= "function" then return false end
   local ok, locked = pcall(check)
@@ -62,7 +66,13 @@ end
 local reported = false
 --- `text` in the current voice. Whatever goes wrong, the text comes back as typed.
 function BT.Rewrite(text, chatType, opts)
-  local ok, result = pcall(function() return BT.Engine.Speak(text, opts or BT.Options()) end)
+  local ok, result = pcall(function()
+    opts = opts or BT.Options()
+    if chatType ~= "EMOTE" then return BT.Engine.Speak(text, opts) end
+    -- An emote is narration: only what is said inside "quotes" is in your voice.
+    local spoken = text:gsub('"(.-)"', function(said) return '"' .. BT.Engine.Speak(said, opts) .. '"' end)
+    return #spoken <= 255 and spoken or text
+  end)
   if ok and type(result) == "string" then return result end
   if not reported then
     reported = true

@@ -11,7 +11,7 @@ return function(BT)
     sounds = { { tier = 2, pattern = "ing$", repl = "in'" } },
     openers = { "Arr," }, closers = { "Yarr!" }, phrases = phrases() })
   BT.RegisterVoice({ id = "t_class", name = "T Class", kind = "class", icon = "i",
-    swaps = { kill = { tier = 1, "smite" }, hello = { tier = 1, "hail" } },
+    swaps = { kill = { tier = 1, "smite" }, hello = { tier = 1, "hail" }, them = { tier = 1, "'em" } },
     sounds = {}, openers = {}, closers = {}, phrases = phrases() })
   BT.RegisterVoice({ id = "t_long", name = "T Long", kind = "race", icon = "i",
     swaps = { a = { tier = 1, "aaaaaaaaaa" } }, sounds = {}, openers = {}, closers = {}, phrases = phrases() })

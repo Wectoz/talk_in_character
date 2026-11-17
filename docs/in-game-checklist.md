@@ -8,7 +8,7 @@ and work down the list. Note anything that fails.
    setting survives `/reload`.
 3. **Panel look.** Bronze edges, the infinity mark by the title, dropdown rows with icons. Note any
    voice whose icon shows as a green square.
-4. **Auto mode.** Say, Yell, Emote, Party, Guild and Whisper are voiced. Officer and Trade are not,
+4. **Auto mode.** Say, Yell, Party, Guild and Whisper are voiced. In `/e`, only text in "quotes" is voiced. Officer and Trade are not,
    until ticked.
 5. **Links.** Shift-click an item into a message. The link still works for other players.
 6. **Send as typed.** Ctrl+Enter sends the message unchanged (tell me if Ctrl+Enter does not send at all). A Battle.net whisper is never changed.
@@ -19,7 +19,7 @@ and work down the list. Note anything that fails.
    once and correctly.
 9. **Autocorrect Forever.** With it on, a typo is fixed and then voiced. With its own accent set,
    the panel shows the notice and "Turn it off" works. The "Fix my spelling first" box follows it.
-10. **Wheel.** Bind a key in the panel, hold it, flick, release. The ring is round, small and centred
+10. **Wheel.** Bind a key in the panel (a key already used for something else is refused with a message; clicking elsewhere cancels), hold it, flick, release. The ring is round, small and centred
     on the cursor. Does the phrase send in Say and in Yell outdoors? If the game refuses, set
     "Speak in" to Party or Guild and tell me.
 11. **Boss fight.** In a dungeon boss fight, chat sends normally and unvoiced, the wheel does not

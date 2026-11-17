@@ -17,7 +17,7 @@ function test_other_addon_loading_is_ignored()
   local before = BT.db Stub.Event("ADDON_LOADED", "SomethingElse") assert(BT.db == before) end
 function test_say_rewritten()        assert(send("hello", "SAY") == "ahoy") end
 function test_each_default_chat()
-  for _, t in ipairs({ "SAY", "YELL", "EMOTE", "PARTY", "RAID", "GUILD", "WHISPER" }) do assert(send("hello", t) == "ahoy", t) end
+  for _, t in ipairs({ "SAY", "YELL", "PARTY", "RAID", "GUILD", "WHISPER" }) do assert(send("hello", t) == "ahoy", t) end
   for _, t in ipairs({ "OFFICER", "INSTANCE_CHAT", "CHANNEL" }) do assert(send("hello", t) == "hello", t) end end
 function test_unticked_chat_untouched() assert(send("hello", "OFFICER") == "hello") end
 function test_ticking_a_chat_enables_it()
@@ -193,3 +193,22 @@ function test_autocorrect_switch_uses_its_slash_command()
   local said SlashCmdList.AUTOCORRECTFOREVER = function(msg) said = msg end
   BT.SetAutocorrect(false) assert(said == "off") BT.SetAutocorrect(true) assert(said == "on")
   SlashCmdList.AUTOCORRECTFOREVER = nil BT.SetAutocorrect(true) end
+
+-- Small issues fixed after the first review
+function test_emote_voices_only_quoted_speech()
+  assert(send('waves and says "hello" to you', "EMOTE") == 'waves and says "ahoy" to you')
+  assert(send('says "hello" then "hello"', "EMOTE") == 'says "ahoy" then "ahoy"') end
+function test_emote_without_quotes_is_left_alone() assert(send("waves hello", "EMOTE") == "waves hello") end
+function test_emote_preview_matches() assert(BT.PreviewText('says "hello"', "EMOTE") == 'says "ahoy"' and BT.PreviewText("waves hello", "EMOTE") == nil) end
+function test_lockdown_cvar_counts_as_lockdown()
+  Stub.cvars = { addonChatRestrictionsForced = true } assert(BT.InLockdown() == true and send("hello", "SAY") == "hello")
+  Stub.cvars = nil assert(BT.InLockdown() == false) end
+function test_bind_wheel_key_refuses_a_key_in_use()
+  Stub.bindings, Stub.boundKey, Stub.actions, Stub.prints = {}, nil, { G = "TOGGLEGUILDTAB" }, 0
+  assert(BT.BindWheelKey("G") == false and next(Stub.bindings) == nil and Stub.prints == 1) Stub.actions = nil end
+function test_bind_wheel_key_allows_its_own_key_again()
+  Stub.bindings, Stub.boundKey, Stub.actions = {}, "G", { G = "BRONZETONGUE_WHEEL" }
+  assert(BT.BindWheelKey("G") == true and Stub.bindings.G == "BRONZETONGUE_WHEEL") Stub.actions, Stub.boundKey = nil, nil end
+function test_bind_wheel_key_reports_a_failed_bind()
+  Stub.bindings, Stub.bindFails, Stub.prints = {}, true, 0
+  assert(BT.BindWheelKey("G") == false and Stub.prints == 1) Stub.bindFails = nil end

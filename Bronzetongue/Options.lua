@@ -44,10 +44,22 @@ function BT.BindWheelKey(key)
     BT.Print("Key bindings can't change in combat.")
     return false
   end
+  if key and GetBindingAction then
+    local action = GetBindingAction(key)
+    if type(action) == "string" and action ~= "" and action ~= WHEEL_COMMAND then
+      local name = _G["BINDING_NAME_" .. action] or action
+      BT.Print(key .. " is already used for \"" .. tostring(name) .. "\". Pick another key, or unbind it in Key Bindings first.")
+      return false
+    end
+  end
   local old = { GetBindingKey(WHEEL_COMMAND) }
   for _, oldKey in ipairs(old) do SetBinding(oldKey, nil) end
-  if key then SetBinding(key, WHEEL_COMMAND) end
+  local bound = key == nil or SetBinding(key, WHEEL_COMMAND)
   SaveBindings(GetCurrentBindingSet())
+  if not bound then
+    BT.Print("The game would not bind " .. key .. ". Try another key.")
+    return false
+  end
   return true
 end
 
@@ -298,6 +310,7 @@ local function BuildVoice(y)
   slider:SetMinMaxValues(1, 3)
   slider:SetValueStep(1)
   slider:SetObeyStepOnDrag(true)
+  slider:SetHitRectInsets(0, 0, -8, -8) -- the bar is thin; this makes it easy to grab
   local thumb = slider:CreateTexture(nil, "OVERLAY")
   thumb:SetTexture(WHITE)
   thumb:SetSize(9, 16)
@@ -372,8 +385,13 @@ local function BuildWheel(y)
   local function Stop()
     key.capturing = false
     key:EnableKeyboard(false)
+    key:UnregisterEvent("GLOBAL_MOUSE_DOWN")
     key:Refresh()
   end
+  -- A click anywhere else gives the keyboard back.
+  key:SetScript("OnEvent", function(self)
+    if self.capturing and not self:IsMouseOver() then Stop() end
+  end)
   function key:Refresh()
     if self.capturing then
       self.label:SetText("Press a key (Esc cancels)")
@@ -395,6 +413,7 @@ local function BuildWheel(y)
     if InCombatLockdown() then return BT.Print("Key bindings can't change in combat.") end
     self.capturing = true
     self:EnableKeyboard(true)
+    self:RegisterEvent("GLOBAL_MOUSE_DOWN")
     self:Refresh()
   end)
   key:SetScript("OnKeyDown", function(self, pressed)
@@ -422,8 +441,10 @@ local function BuildAutocorrect(y)
     function(v) BT.SetAutocorrect(v) end)
   local note = Label(panel, "", COLOR.muted)
   note:SetPoint("TOPLEFT", 190, y - 26)
+  note:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
+  note:SetJustifyH("LEFT")
   local warning = Label(panel, "Autocorrect Forever's own accent is on, so messages get two accents.", COLOR.gold)
-  warning:SetPoint("TOPLEFT", 20, y - 50)
+  warning:SetPoint("TOPLEFT", 20, y - 62)
   local fix = TextButton(panel, "Turn it off", 90, function()
     local command = SlashCmdList and SlashCmdList.AUTOCORRECTFOREVER
     if type(command) == "function" then pcall(command, "accent off") end

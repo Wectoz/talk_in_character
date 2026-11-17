@@ -50,3 +50,6 @@ function test_over_255_falls_back_lighter()
 function test_over_255_returns_original()
   local t = string.rep("a ", 120) assert(S(t, { race = "t_long", strength = 1 }) == t) end
 function test_default_random_works() assert(BT.Engine.Speak("hello", { race = "t_race", strength = 1 }) == "ahoy") end
+
+function test_capital_survives_a_leading_apostrophe()
+  assert(S("Them", { class = "t_class", strength = 1 }) == "'Em" and S("them", { class = "t_class", strength = 1 }) == "'em") end

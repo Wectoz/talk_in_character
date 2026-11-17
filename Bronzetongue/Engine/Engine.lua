@@ -10,7 +10,10 @@ local CHANCE = { [2] = 10, [3] = 35 } -- percent chance of an opener or closer, 
 --- `output` in the letter case of `word`: SHOUTED, Capitalised, or as written.
 local function Recase(word, output)
   if #word > 1 and word == word:upper() and word ~= word:lower() then return output:upper() end
-  if #word > 1 and word:find("^%u") then return (output:gsub("^%l", string.upper)) end
+  if #word > 1 and word:find("^%u") then
+    -- The first letter, which may sit behind an apostrophe ('ave, 'em).
+    return (output:gsub("^(%A*)(%l)", function(lead, letter) return lead .. letter:upper() end))
+  end
   return output
 end
 
