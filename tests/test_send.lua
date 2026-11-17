@@ -1,6 +1,6 @@
 dofile("tests/stubs.lua")
 local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
-  "Engine/Phrases.lua", "Send.lua" })
+  "Engine/Phrases.lua", "Send.lua", "Preview.lua" })
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "Bronzetongue")
 BT.db.race, BT.db.class, BT.db.strength, BT.db.matched = "t_race", nil, 1, true
@@ -89,3 +89,29 @@ function test_toc_lists_every_lua_file()
     assert(listed[rel], "not in TOC: " .. rel) listed[rel] = nil
   end
   assert(next(listed) == nil, "TOC lists a missing file: " .. tostring(next(listed))) end
+
+-- Preview
+function test_preview_text()         assert(BT.PreviewText("hello", "SAY") == "ahoy") end
+function test_preview_nil_when_same() assert(BT.PreviewText("zzz", "SAY") == nil) end
+function test_preview_nil_when_off() BT.db.preview = false assert(BT.PreviewText("hello", "SAY") == nil) BT.db.preview = true end
+function test_preview_nil_unticked() assert(BT.PreviewText("hello", "OFFICER") == nil) end
+function test_preview_nil_slash()    assert(BT.PreviewText("/who", "SAY") == nil) end
+function test_preview_nil_empty()    assert(BT.PreviewText("", "SAY") == nil and BT.PreviewText(nil, "SAY") == nil) end
+function test_preview_nil_in_lockdown() Stub.lockdown = true assert(BT.PreviewText("hello", "SAY") == nil) Stub.lockdown = false end
+function test_preview_stable()
+  BT.db.strength, BT.db.mood = 3, "angry"
+  local a = BT.PreviewText("hello there friend", "SAY")
+  for i = 1, 20 do assert(BT.PreviewText("hello there friend", "SAY") == a) end
+  assert(a == "ahoy there friend!")
+  BT.db.strength, BT.db.mood = 1, "calm" end
+function test_preview_hooks_a_box_once()
+  local box = FakeBox("hello", "SAY") local hooks = 0
+  function box:HookScript() hooks = hooks + 1 end
+  BT.HookPreview(box) local first = hooks BT.HookPreview(box)
+  assert(first > 0 and hooks == first) end
+function test_preview_secret_text_is_ignored()
+  Stub.targetName = "hello" Stub.targetSecret = true assert(BT.PreviewText("hello", "SAY") == nil)
+  Stub.targetName = nil Stub.targetSecret = false end
+function test_send_secret_text_is_left_alone()
+  Stub.targetName = "hello" Stub.targetSecret = true local _, box = send("hello", "SAY") assert(box.sets == 0)
+  Stub.targetName = nil Stub.targetSecret = false end

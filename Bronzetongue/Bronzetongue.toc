@@ -14,8 +14,16 @@ Engine\Engine.lua
 Engine\Moods.lua
 Engine\Phrases.lua
 
+Voices\Classes\hunter.lua
 Voices\Classes\mage.lua
+Voices\Classes\paladin.lua
+Voices\Classes\rogue.lua
+Voices\Classes\warrior.lua
 Voices\Factions\bloodsail.lua
+Voices\Factions\centaur.lua
+Voices\Factions\naga.lua
+Voices\Factions\zandalar.lua
 Voices\Races\gnome.lua
 
 Send.lua
+Preview.lua

@@ -79,7 +79,7 @@ local function OnPreSendText(_, box)
   local chatType = box.GetAttribute and box:GetAttribute("chatType")
   if not BT.WillRewrite(chatType) then return end
   local text = box:GetText()
-  if type(text) ~= "string" then return end
+  if not Readable(text) then return end
   if BT.wheelLine and text == BT.wheelLine then -- a wheel phrase waiting in the box is already in voice
     BT.wheelLine = nil
     return
