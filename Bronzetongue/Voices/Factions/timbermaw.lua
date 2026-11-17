@@ -37,7 +37,7 @@ BT.RegisterVoice({
     hands = { tier = 1, "paws" },
     hair = { tier = 1, "fur" },
     -- medium
-    no = { tier = 2, "grr, no" },
+    no = { tier = 3, "grr, no" },
     gold = { tier = 2, "shinies" },
     money = { tier = 2, "shinies" },
     hungry = { tier = 2, "rumbly" },

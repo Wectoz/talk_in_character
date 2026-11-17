@@ -33,7 +33,8 @@ function test_lockdown_api_missing()
 function test_lockdown_api_erroring_counts_as_open()
   local f = C_ChatInfo.InChatMessagingLockdown C_ChatInfo.InChatMessagingLockdown = function() error("x") end
   assert(send("hello", "SAY") == "ahoy") C_ChatInfo.InChatMessagingLockdown = f end
-function test_alt_sends_plain()      Stub.alt = true assert(send("hello", "SAY") == "hello") Stub.alt = false end
+function test_ctrl_enter_sends_plain() Stub.ctrl = true assert(send("hello", "SAY") == "hello") Stub.ctrl = false end
+function test_alt_enter_is_not_special() Stub.alt = true assert(send("hello", "SAY") == "ahoy") Stub.alt = false end
 function test_no_voice_chosen()      BT.db.race = nil assert(send("hello", "SAY") == "hello") BT.db.race = "t_race" end
 function test_stale_voice_id()       BT.db.race = "removed_voice" assert(send("hello", "SAY") == "hello") BT.db.race = "t_race" end
 function test_unchanged_text_is_not_set() local _, box = send("zzz", "SAY") assert(box.sets == 0) end
@@ -104,11 +105,20 @@ function test_preview_stable()
   for i = 1, 20 do assert(BT.PreviewText("hello there friend", "SAY") == a) end
   assert(a == "ahoy there friend!")
   BT.db.strength, BT.db.mood = 1, "calm" end
-function test_preview_hooks_a_box_once()
+function test_preview_never_hooks_chat_boxes()
   local box = FakeBox("hello", "SAY") local hooks = 0
   function box:HookScript() hooks = hooks + 1 end
-  BT.HookPreview(box) local first = hooks BT.HookPreview(box)
-  assert(first > 0 and hooks == first) end
+  function box:SetScript() hooks = hooks + 1 end
+  EventRegistry.Fire("ChatFrame.OnEditBoxPreSendText", box)
+  Stub.activeBox = box BT.PreviewTick() Stub.activeBox = nil
+  assert(hooks == 0) end
+function test_preview_tick_follows_the_active_box()
+  Stub.activeBox = FakeBox("hello", "SAY") assert(BT.PreviewTick() == "ahoy")
+  Stub.activeBox = FakeBox("zzz", "SAY") assert(BT.PreviewTick() == nil)
+  Stub.activeBox = nil assert(BT.PreviewTick() == nil) end
+function test_preview_tick_ignores_a_hidden_box()
+  local box = FakeBox("hello", "SAY") function box:IsShown() return false end
+  Stub.activeBox = box assert(BT.PreviewTick() == nil) Stub.activeBox = nil end
 function test_preview_secret_text_is_ignored()
   Stub.targetName = "hello" Stub.targetSecret = true assert(BT.PreviewText("hello", "SAY") == nil)
   Stub.targetName = nil Stub.targetSecret = false end
@@ -128,11 +138,9 @@ function test_wheelsay_raid_needs_a_raid()
   resetWheel() BT.db.wheelChat = "RAID" Stub.inGroup = true Stub.inRaid = false BT.WheelSay("hi") assert(Stub.sent[2] == "SAY") Stub.inGroup = false resetWheel() end
 function test_wheelsay_unknown_chat_falls_back_to_say()
   resetWheel() BT.db.wheelChat = "CHANNEL" BT.WheelSay("hi") assert(Stub.sent[2] == "SAY") resetWheel() end
-function test_wheelsay_to_box_mode()
-  resetWheel() BT.db.wheelToBox = true BT.WheelSay("hello")
-  assert(Stub.sent == nil and Stub.opened == "hello" and BT.wheelLine == "hello")
-  assert(send("hello", "SAY") == "hello" and BT.wheelLine == nil)
-  BT.db.wheelToBox = false resetWheel() end
+function test_wheelsay_never_opens_the_chat_box()
+  resetWheel() BT.db.wheelToBox = true BT.WheelSay("hello") BT.db.wheelToBox = nil
+  assert(Stub.opened == nil and Stub.sent[1] == "hello") resetWheel() end
 function test_wheel_closed_in_lockdown()
   resetWheel() Stub.lockdown = true BronzetongueWheel_OnKey("down") assert(not BT.wheelOpen) Stub.lockdown = false BronzetongueWheel_OnKey("up") end
 function test_wheel_off_setting()

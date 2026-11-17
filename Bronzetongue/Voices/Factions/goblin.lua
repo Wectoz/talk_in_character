@@ -74,7 +74,7 @@ BT.RegisterVoice({
     wrong = { tier = 3, "not in the fine print" },
   },
   sounds = {
-    { tier = 3, pattern = "ing$", repl = "in'" },
+    { tier = 3, pattern = "(%a%a%a)ing$", repl = "%1in'" },
   },
   openers = { "Listen, pal,", "Have I got a deal for you!", "Between you and me,", "Step right up!", "Psst,", "Okay, okay," },
   closers = { "Time is money, friend!", "No refunds.", "Tell your friends!", "Batteries not included.", "Cash up front.",

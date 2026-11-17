@@ -9,7 +9,7 @@ BT.RegisterVoice({
     hey = { tier = 1, "I say" },
     yes = { tier = 1, "affirmative", "indeed" },
     yeah = { tier = 1, "indeed" },
-    no = { tier = 1, "negative" },
+    no = { tier = 3, "negative" },
     nope = { tier = 1, "negative" },
     ok = { tier = 1, "acceptable" },
     okay = { tier = 1, "acceptable" },

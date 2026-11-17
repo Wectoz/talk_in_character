@@ -9,7 +9,7 @@ BT.RegisterVoice({
     hey = { tier = 1, "oi" },
     yes = { tier = 1, "uh huh" },
     yeah = { tier = 1, "uh huh" },
-    no = { tier = 1, "nuh uh" },
+    no = { tier = 3, "nuh uh" },
     ok = { tier = 1, "duh, sure" },
     okay = { tier = 1, "duh, sure" },
     thanks = { tier = 1, "uh, thanks" },
@@ -70,7 +70,7 @@ BT.RegisterVoice({
     horse = { tier = 3, "snack with legs" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in'" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in'" },
     { tier = 3, pattern = "^th", repl = "d" },
     { tier = 3, pattern = "tion$", repl = "shun" },
   },

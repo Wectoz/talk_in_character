@@ -71,7 +71,7 @@ BT.RegisterVoice({
     more = { tier = 3, "more more" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in" },
   },
   openers = { "Eep!", "Psst,", "Oh no oh no,", "Kobold say,", "Ooh, candle!" },
   closers = { "You no take candle!", "No hit kobold!", "...is that candle?", "Dig dig dig.", "Kobold only little." },

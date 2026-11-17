@@ -29,7 +29,7 @@ BT.RegisterVoice({
     omg = { tier = 1, "Light preserve us" },
     lol = { tier = 1, "ha" },
     -- medium
-    no = { tier = 2, "nay" },
+    no = { tier = 3, "nay" },
     kill = { tier = 2, "slay" },
     help = { tier = 2, "aid" },
     boss = { tier = 2, "fiend" },

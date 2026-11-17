@@ -69,7 +69,7 @@ BT.RegisterVoice({
     ["don't"] = { tier = 3, "don'" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in'" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in'" },
     { tier = 3, pattern = "er$", repl = "a" },
   },
   openers = { "Ey mon,", "Hey mon,", "Ya know,", "By da loa,", "Listen up, mon," },

@@ -77,7 +77,7 @@ BT.RegisterVoice({
     law = { tier = 3, "Stormwind's so-called law" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in'" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in'" },
     { tier = 3, pattern = "^h", repl = "'" },
   },
   openers = { "Psst,", "Keep it quiet, but", "Mark my words,", "Between us and the scarecrows,", "Listen close," },

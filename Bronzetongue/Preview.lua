@@ -42,7 +42,7 @@ local function Update(box)
   local text = box:GetText()
   local chatType = box.GetAttribute and box:GetAttribute("chatType")
   local spoken = BT.PreviewText(text, chatType)
-  if not spoken then return Hide() end
+  if not spoken then Hide() return nil end
   local f = Frame()
   f:ClearAllPoints()
   f:SetPoint("BOTTOMLEFT", box, "TOPLEFT", 0, 4)
@@ -50,20 +50,34 @@ local function Update(box)
   f.text:SetText("|cffc9ad6a>|r " .. spoken)
   f:SetHeight((f.text:GetStringHeight() or 12) + 8)
   f:Show()
+  return spoken
 end
 
-local hooked = {}
---- Shows the preview for `box`. HookScript only: the box's own scripts stay as they are.
-function BT.HookPreview(box)
-  if type(box) ~= "table" or hooked[box] or type(box.HookScript) ~= "function" then return end
-  hooked[box] = true
-  box:HookScript("OnTextChanged", function(self) if not pcall(Update, self) then Hide() end end)
-  box:HookScript("OnHide", Hide)
-  box:HookScript("OnEditFocusLost", Hide)
+--- The chat box being typed in, or nil.
+local function ActiveBox()
+  local get = (ChatFrameUtil and ChatFrameUtil.GetActiveWindow) or ChatEdit_GetActiveWindow
+  if type(get) ~= "function" then return nil end
+  local ok, box = pcall(get)
+  if ok and type(box) == "table" and type(box.GetText) == "function" and box:IsShown() then return box end
 end
 
-local loader = CreateFrame("Frame")
-loader:RegisterEvent("PLAYER_LOGIN")
-loader:SetScript("OnEvent", function()
-  for index = 1, 10 do BT.HookPreview(_G["ChatFrame" .. index .. "EditBox"]) end
+--- Shows the preview for the active chat box. Returns what it shows, or nil.
+function BT.PreviewTick()
+  local box = ActiveBox()
+  if not box then Hide() return nil end
+  local ok, spoken = pcall(Update, box)
+  if not ok then Hide() return nil end
+  return spoken
+end
+
+-- The preview watches from its own frame. Nothing is hooked onto the game's chat boxes: a
+-- script hook there taints the box's own handlers, and a tainted send is refused (and the
+-- message lost) during chat lockdown.
+local watcher = CreateFrame("Frame")
+local elapsedSince = 0
+watcher:SetScript("OnUpdate", function(_, elapsed)
+  elapsedSince = elapsedSince + (elapsed or 0)
+  if elapsedSince < 0.1 then return end
+  elapsedSince = 0
+  BT.PreviewTick()
 end)

@@ -71,9 +71,9 @@ function GetBindingKey() return Stub.boundKey end
 function SetBinding(key, command) Stub.bindings = Stub.bindings or {} Stub.bindings[key] = command or false return true end
 function SaveBindings() Stub.bindingsSaved = true end
 function GetCurrentBindingSet() return 1 end
-function IsControlKeyDown() return false end
+function IsControlKeyDown() return Stub.ctrl or false end
 function IsShiftKeyDown() return false end
-ChatFrameUtil = { OpenChat = function(text) Stub.opened = text end }
+ChatFrameUtil = { OpenChat = function(text) Stub.opened = text end, GetActiveWindow = function() return Stub.activeBox end }
 
 --- A chat edit box holding `text`, set to `chatType`.
 function FakeBox(text, chatType)

@@ -12,7 +12,7 @@ BT.RACE_TOKENS = {
 
 local DEFAULTS = {
   enabled = true, mood = "calm", strength = 2, preview = true,
-  wheel = true, wheelChat = "SAY", wheelToBox = false, matched = false,
+  wheel = true, wheelChat = "SAY", matched = false,
   chats = {
     SAY = true, YELL = true, EMOTE = true, PARTY = true, RAID = true, GUILD = true, WHISPER = true,
     OFFICER = false, INSTANCE_CHAT = false, CHANNEL = false,

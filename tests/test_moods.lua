@@ -38,3 +38,17 @@ function test_mood_dropped_on_overflow()
 function test_mood_does_not_touch_links()
   local L = "|cff0070dd|Hitem:1:::|h[Sass Ring]|h|r"
   assert(BT.Engine.Speak("yes " .. L, { race = "t_race", strength = 1, mood = "drunk", random = never }) == "yesh " .. L) end
+
+-- A message with no words (an emoticon, a number, a lone link) is left exactly as typed.
+function test_wordless_messages_take_no_mood_or_interjection()
+  local L = "|cff0070dd|Hitem:1:::|h[Great Big Sword]|h|r"
+  local function first() return 1 end
+  for _, mood in ipairs({ "angry", "drunk", "scared" }) do
+    for _, text in ipairs({ ":)", "<3", "123", "!!!", ":D", L, "a" }) do
+      local out = BT.Engine.Speak(text, { race = "t_race", strength = 3, mood = mood, random = first })
+      assert(out == text, mood .. " changed '" .. text .. "' to '" .. out .. "'")
+    end
+  end end
+function test_link_words_do_not_count_toward_interjections()
+  local L = "|cff0070dd|Hitem:1:::|h[Great Big Sword]|h|r"
+  assert(BT.Engine.Speak("see " .. L, { race = "t_race", strength = 3, random = function() return 1 end }) == "see " .. L) end

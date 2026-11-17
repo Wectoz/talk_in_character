@@ -11,7 +11,7 @@ and work down the list. Note anything that fails.
 4. **Auto mode.** Say, Yell, Emote, Party, Guild and Whisper are voiced. Officer and Trade are not,
    until ticked.
 5. **Links.** Shift-click an item into a message. The link still works for other players.
-6. **Send as typed.** Alt+Enter sends the message unchanged. A Battle.net whisper is never changed.
+6. **Send as typed.** Ctrl+Enter sends the message unchanged (tell me if Ctrl+Enter does not send at all). A Battle.net whisper is never changed.
 7. **Preview.** The line appears above the chat box, in the right place, under each chat UI, one at
    a time: default, EllesmereUI or EUIStandaloneChat, BetterForeverChat, Prat, FlareUI, Chattynator,
    HydraUI.
@@ -20,8 +20,8 @@ and work down the list. Note anything that fails.
 9. **Autocorrect Forever.** With it on, a typo is fixed and then voiced. With its own accent set,
    the panel shows the notice and "Turn it off" works. The "Fix my spelling first" box follows it.
 10. **Wheel.** Bind a key in the panel, hold it, flick, release. The ring is round, small and centred
-    on the cursor. Does the phrase send in Say and in Yell outdoors? If the game refuses, tick "Put
-    the phrase in my chat box instead" and tell me, so that becomes the default.
+    on the cursor. Does the phrase send in Say and in Yell outdoors? If the game refuses, set
+    "Speak in" to Party or Guild and tell me.
 11. **Boss fight.** In a dungeon boss fight, chat sends normally and unvoiced, the wheel does not
     open, and no error appears afterwards.
 12. **Targets.** Target a player, then an NPC: wheel greetings use the name. In combat inside an

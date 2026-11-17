@@ -352,8 +352,10 @@ local function BuildAuto(y)
     Check(panel, CHAT_LABELS[chatType], 20 + column * 112, y - 24 - row * 24,
       function() return db.chats[chatType] end, function(v) db.chats[chatType] = v end)
   end
-  local note = Label(panel, "Battle.net whispers are never changed. Hold Alt while pressing Enter to send one message as typed.", COLOR.muted)
+  local note = Label(panel, "Battle.net whispers are never changed. Hold Ctrl while pressing Enter to send one message as typed.", COLOR.muted)
   note:SetPoint("TOPLEFT", 20, y - 76)
+  note:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
+  note:SetJustifyH("LEFT")
   Check(panel, "Show a preview above the chat box", 20, y - 96, function() return db.preview end, function(v) db.preview = v end)
   return y - 130
 end
@@ -410,9 +412,7 @@ local function BuildWheel(y)
 
   Label(panel, "Speak in", COLOR.muted):SetPoint("TOPLEFT", 450, y - 26)
   Dropdown(panel, 90, 505, y - 20, PlainItems(WHEEL_CHATS), function() return db.wheelChat end, function(v) db.wheelChat = v end)
-  Check(panel, "Put the phrase in my chat box instead of sending it", 20, y - 52,
-    function() return db.wheelToBox end, function(v) db.wheelToBox = v end)
-  return y - 86
+  return y - 60
 end
 
 local function BuildAutocorrect(y)

@@ -51,7 +51,7 @@ local function Word(word, race, class, strength, random)
   return lead .. Recase(core, sounded)
 end
 
-local function Interject(text, voice, strength, random, mood)
+local function Interject(text, voice, strength, random)
   local chance = CHANCE[strength]
   if not chance or not voice then return text end
   local openers, closers = voice.openers, voice.closers
@@ -70,11 +70,14 @@ local function Attempt(text, race, class, opts, strength, random, mood)
     if run:find("[\128-\255]") then return run end
     return Word(run, race, class, strength, random)
   end)
-  if select(2, text:gsub("%S+", "")) >= 3 then
+  -- Counted on the shielded text, so the words inside a link or a name do not count.
+  local words = select(2, shielded:gsub("%a%a+", ""))
+  if words >= 3 then
     shielded = Interject(shielded, race, strength, random)
     shielded = Interject(shielded, class, strength, random)
   end
-  if BT.Moods and mood ~= "calm" then
+  -- An emoticon, a number or a lone link has nothing to say in a mood.
+  if BT.Moods and mood ~= "calm" and words >= 1 then
     local voices = {}
     if race then voices[#voices + 1] = race end
     if class then voices[#voices + 1] = class end

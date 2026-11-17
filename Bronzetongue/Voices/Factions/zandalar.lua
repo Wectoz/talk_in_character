@@ -71,7 +71,7 @@ BT.RegisterVoice({
     food = { tier = 3, "a feast fit for da loa" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in'" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in'" },
     { tier = 3, pattern = "er$", repl = "a" },
   },
   openers = { "By da loa,", "Hear da word of Zandalar,", "As it was written,", "Da empire speaks,", "Hmph," },

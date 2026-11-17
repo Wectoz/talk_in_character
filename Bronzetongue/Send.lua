@@ -74,16 +74,12 @@ end
 local busy = false
 local function OnPreSendText(_, box)
   if busy or type(box) ~= "table" or type(box.GetText) ~= "function" then return end
-  if BT.HookPreview then BT.HookPreview(box) end
-  if IsAltKeyDown and IsAltKeyDown() then return end -- Alt+Enter: this one goes out as typed
+  -- Ctrl+Enter: this one goes out as typed. (Alt+Enter is the client's fullscreen toggle.)
+  if IsControlKeyDown and IsControlKeyDown() then return end
   local chatType = box.GetAttribute and box:GetAttribute("chatType")
   if not BT.WillRewrite(chatType) then return end
   local text = box:GetText()
   if not Readable(text) then return end
-  if BT.wheelLine and text == BT.wheelLine then -- a wheel phrase waiting in the box is already in voice
-    BT.wheelLine = nil
-    return
-  end
   local spoken = BT.Rewrite(text, chatType)
   if spoken ~= text then
     busy = true

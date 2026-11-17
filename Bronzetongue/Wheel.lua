@@ -28,14 +28,9 @@ function BT.WheelTarget()
   return target
 end
 
---- Says a wheel line in the chosen chat, or puts it in the chat box when set to.
+--- Says a wheel line in the chosen chat. It never opens the chat box: doing that from addon
+--- code taints the box, and a tainted box loses messages during chat lockdown.
 function BT.WheelSay(line)
-  if BT.db.wheelToBox then
-    BT.wheelLine = line -- so the send hook does not voice it a second time
-    if ChatFrameUtil and ChatFrameUtil.OpenChat then ChatFrameUtil.OpenChat(line)
-    elseif ChatFrame_OpenChat then ChatFrame_OpenChat(line) end
-    return
-  end
   local chat = BT.db.wheelChat
   if not WHEEL_CHATS[chat] then chat = "SAY" end
   if chat == "RAID" and not (IsInRaid and IsInRaid()) then chat = "SAY" end

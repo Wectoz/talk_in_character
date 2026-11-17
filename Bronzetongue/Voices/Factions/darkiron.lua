@@ -9,7 +9,7 @@ BT.RegisterVoice({
     hey = { tier = 1, "oi" },
     yes = { tier = 1, "aye" },
     yeah = { tier = 1, "aye" },
-    no = { tier = 1, "nay" },
+    no = { tier = 3, "nay" },
     ok = { tier = 1, "aye, fine" },
     okay = { tier = 1, "aye, fine" },
     friend = { tier = 1, "clansman" },
@@ -74,7 +74,7 @@ BT.RegisterVoice({
     outside = { tier = 3, "topside" },
   },
   sounds = {
-    { tier = 2, pattern = "ing$", repl = "in'" },
+    { tier = 2, pattern = "(%a%a%a)ing$", repl = "%1in'" },
     { tier = 3, pattern = "out", repl = "oot" },
     { tier = 3, pattern = "^down$", repl = "doon" },
   },

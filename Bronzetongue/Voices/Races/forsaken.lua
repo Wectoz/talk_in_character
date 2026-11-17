@@ -43,7 +43,7 @@ BT.RegisterVoice({
     really = { tier = 1, "honestly" },
     always = { tier = 1, "eternally" },
     -- medium
-    no = { tier = 2, "mercifully, no" },
+    no = { tier = 3, "mercifully, no" },
     kill = { tier = 2, "bury" },
     boss = { tier = 2, "abomination" },
     cool = { tier = 2, "delightfully grim" },

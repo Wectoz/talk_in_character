@@ -40,7 +40,7 @@ BT.RegisterVoice({
     of = { tier = 2, "o'" },
     ["and"] = { tier = 2, "an'" },
     ["for"] = { tier = 2, "fer" },
-    no = { tier = 2, "nae" },
+    no = { tier = 3, "nae" },
     ["can't"] = { tier = 2, "cannae" },
     maybe = { tier = 2, "mebbe" },
     good = { tier = 2, "bonny" },

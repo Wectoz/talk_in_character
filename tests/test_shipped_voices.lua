@@ -74,3 +74,15 @@ function test_gnome_mage_sample()
   local out = BT.Engine.Speak(input, { race = "gnome", class = "mage", strength = 3 })
   assert(out ~= input and #out <= 255)
 end
+
+function test_ing_rule_spares_short_nouns()
+  each(function(id, v)
+    local opts = { strength = 3, random = function() return 99 end }
+    opts[v.kind == "class" and "class" or "race"] = id
+    local out = BT.Engine.Speak("the king will bring a ring and a thing", opts)
+    for _, bad in ipairs({ "kin'", "brin'", "rin'", "thin'" }) do
+      assert(not out:find(bad, 1, true), id .. " turns a short noun into " .. bad .. ": " .. out)
+    end
+  end) end
+function test_no_is_only_swapped_at_heavy_strength()
+  each(function(id, v) assert(not v.swaps.no or v.swaps.no.tier == 3, id .. " swaps 'no' below heavy strength") end) end

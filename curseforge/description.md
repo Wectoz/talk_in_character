@@ -21,7 +21,7 @@ Open the options with `/bronze` (or `/bronzetongue`). `/bronze off` and `/bronze
 ## Good to know
 
 - **Boss encounters:** the game restricts chat addons during boss encounters and similar content. Bronzetongue does nothing then, so your messages always go out.
-- **Send one message as typed:** hold Alt while pressing Enter.
+- **Send one message as typed:** hold Ctrl while pressing Enter.
 - **Battle.net whispers are never changed.**
 - **Whisper window addons:** whispers typed in the windows of WIM, WhatTheWhisper or WhisperMessenger go out as typed. Whispers typed in the normal chat box are voiced.
 - **Links, player names, raid icons and slash commands are left alone.**
