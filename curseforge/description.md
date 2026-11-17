@@ -6,7 +6,7 @@ For WoW: Forever.
 
 ## What it does
 
-- **34 voices.** 9 races, 9 classes, and 16 factions and creatures: Bloodsail Buccaneers, Steamwheedle Goblin, Defias Brotherhood, Scarlet Crusade, Venture Co., Murloc, Kobold, Ogre, Gnoll, Dark Iron, Argent Dawn, Cenarion Circle, Timbermaw Furbolg, Centaur, Naga and Zandalar.
+- **33 voices.** 8 races, 9 classes, and 16 factions and creatures: Bloodsail Buccaneers, Steamwheedle Goblin, Defias Brotherhood, Scarlet Crusade, Venture Co., Murloc, Kobold, Ogre, Gnoll, Dark Iron, Argent Dawn, Cenarion Circle, Timbermaw Furbolg, Centaur, Naga and Zandalar.
 - **Race and class stack.** The race or faction sets the accent and vocabulary. The class adds attitude. Pick one, the other, or both.
 - **Moods.** Calm, angry, drunk or scared.
 - **Three strengths.** Light stays easy to read. Heavy goes all in.
