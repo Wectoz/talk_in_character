@@ -1,0 +1,21 @@
+## Interface: 16001
+## Title: Bronzetongue
+## Notes: Speak like your race, faction and class. /bronze for options.
+## Author:
+## Version: 1.0.0
+## OptionalDeps: AutocorrectForever
+## SavedVariablesPerCharacter: BronzetongueCharDB
+## IconTexture: Interface\AddOns\Bronzetongue\Media\icon
+
+Core.lua
+Engine\Protect.lua
+Engine\Voices.lua
+Engine\Engine.lua
+Engine\Moods.lua
+Engine\Phrases.lua
+
+Voices\Classes\mage.lua
+Voices\Factions\bloodsail.lua
+Voices\Races\gnome.lua
+
+Send.lua
