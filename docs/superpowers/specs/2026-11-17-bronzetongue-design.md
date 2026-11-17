@@ -70,10 +70,13 @@ with autocorrect.
 - **Works with any chat UI (owner requirement).** It must work with the default chat, EllesmereUI,
   Prat, BetterForeverChat "and so on". So: depend on no chat addon, use only the game's own
   chat edit boxes and the pre-send event, anchor the preview to whichever edit box is active
-  rather than to a fixed frame, and never restyle or move another addon's frames. The owner
-  has BetterForeverChat, EllesmereUIChat and WhisperMessenger installed; Prat is not installed.
-- **Addons with their own message composer are not covered (call).** WhisperMessenger sends
-  through its own window, not the game's chat box, so the pre-send event never fires there.
+  rather than to a fixed frame, and never restyle or move another addon's frames.
+- **Chat addons checked by reading their code (not in game), all installed on the owner's
+  machine:** Prat-3.0, FlareUI and EUIStandaloneChat register their own callbacks on the same
+  pre-send event, so our result must not depend on callback order with any of them.
+  Chattynator and HydraUI keep the game's edit box. ChatCopyPaste does not send.
+- **Addons with their own message composer are not covered (call).** WhisperMessenger, WIM and
+  WhatTheWhisper each send through their own window, not the game's chat box, so the pre-send event never fires there.
   Messages typed in such a window go out as typed. Bronzetongue must not break them. This is
   stated on the CurseForge page.
 - **Autocorrect Forever** exposes `_G.AutocorrectForever`, a `/autocorrect on|off` slash
@@ -263,7 +266,8 @@ applied, mood calm, strength medium, wheel unbound.
   output in a loop.
 - In the game, by the owner: each chat type, a linked item, Alt+Enter, lockdown in a dungeon
   boss fight, with and without Autocorrect Forever, and under each chat UI: default,
-  EllesmereUI, BetterForeverChat, and Prat (the owner would need to install Prat to try it).
+  EllesmereUI, EUIStandaloneChat, BetterForeverChat, Prat, FlareUI, Chattynator, HydraUI, and
+  with WIM, WhatTheWhisper and WhisperMessenger present (their windows send as typed).
 
 ## Left to the builder
 
