@@ -241,3 +241,29 @@ function test_autocorrect_link_check()
   local linked = BT.CheckAutocorrect()
   _G.AutocorrectForever = nil
   assert(linked == false and Stub.prints == 1 and Stub.printed:find("strat", 1, true)) end
+function test_slash_sets_mood_age_and_strength()
+  SlashCmdList.TALKINCHARACTER("drunk") SlashCmdList.TALKINCHARACTER("Elder") SlashCmdList.TALKINCHARACTER("heavy")
+  assert(BT.db.mood == "drunk" and BT.db.age == "elder" and BT.db.strength == 3)
+  SlashCmdList.TALKINCHARACTER("calm") SlashCmdList.TALKINCHARACTER("adult") SlashCmdList.TALKINCHARACTER("light")
+  assert(BT.db.mood == "calm" and BT.db.age == "adult" and BT.db.strength == 1) end
+function test_slash_keep_and_forget()
+  local told = {}
+  SlashCmdList.AUTOCORRECTFOREVER = function(msg) told[#told + 1] = msg end
+  SlashCmdList.TALKINCHARACTER("keep Hello")
+  local kept = send("hello you", "SAY")
+  SlashCmdList.TALKINCHARACTER("forget hello")
+  local voiced = send("hello you", "SAY")
+  SlashCmdList.AUTOCORRECTFOREVER = nil
+  assert(kept == "hello you" and voiced == "ahoy you")
+  assert(told[1] == "keep hello" and told[2] == "forget hello" and next(BT.db.keep) == nil) end
+function test_slash_unknown_word_prints_help()
+  Stub.prints = 0 SlashCmdList.TALKINCHARACTER("banana") assert(Stub.prints == 1 and Stub.printed:find("keep", 1, true)) end
+function test_group_chat_keeps_game_words_when_ticked()
+  BT.voices.t_race.swaps.boss = { tier = 1, "big beastie" }
+  BT.db.chats.PARTY = true
+  local voiced = send("hello boss", "PARTY")
+  BT.db.plainGroups = true
+  local plain, say = send("hello boss", "PARTY"), send("hello boss", "SAY")
+  BT.db.plainGroups = false
+  BT.voices.t_race.swaps.boss = nil
+  assert(voiced == "ahoy big beastie" and plain == "ahoy boss" and say == "ahoy big beastie") end

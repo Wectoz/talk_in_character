@@ -111,17 +111,22 @@ end
 local RUN = "[%w\128-\255]+"
 
 --- Replaces every term in already shielded `text` with a placeholder held in `parts`.
-function Terms.Shield(text, parts)
-  local game = false
+--- `keep` is the player's own set of words to leave alone. `force` treats the message as game
+--- talk whatever it holds. Also returns whether the message held jargon of its own.
+function Terms.Shield(text, parts, keep, force)
+  local jargon = false
   for run in text:gmatch(RUN) do
-    if EXACT[run] or Has(STRICT, run:lower()) then game = true break end
+    if EXACT[run] or Has(STRICT, run:lower()) then jargon = true break end
   end
-  return (text:gsub(RUN, function(run)
+  local game = jargon or force
+  text = text:gsub(RUN, function(run)
     local lower = run:lower()
     -- Letters with digits are a code of some kind: LF1M, AQ40, 2H, 50g.
-    if EXACT[run] or Has(STRICT, lower) or (game and Has(LOOSE, lower)) or (run:find("%a") and run:find("%d")) then
+    if EXACT[run] or Has(STRICT, lower) or (game and Has(LOOSE, lower)) or (keep and keep[lower])
+      or (run:find("%a") and run:find("%d")) then
       parts[#parts + 1] = run
       return "\1" .. #parts .. "\2"
     end
-  end))
+  end)
+  return text, jargon
 end

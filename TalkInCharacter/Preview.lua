@@ -10,7 +10,7 @@ local function Steady(n) return n == 100 and 100 or 1 end
 function BT.PreviewText(text, chatType)
   if not BT.db or not BT.db.preview or not BT.Readable(text) or text:find("^/") then return nil end
   if not BT.WillRewrite(chatType) then return nil end
-  local opts = BT.Options()
+  local opts = BT.Options(chatType)
   opts.random = Steady
   local spoken = BT.Rewrite(text, chatType, opts)
   if spoken == text then return nil end
@@ -45,7 +45,7 @@ local function Update(box)
   if not BT.Readable(text) then Hide() return nil end
   -- Typing pauses far outnumber key presses: work only when the text or a setting changed.
   local db = BT.db
-  local key = table.concat({ text, tostring(chatType), tostring(db.race), tostring(db.class), db.mood, db.age, db.strength, tostring(db.extras),
+  local key = table.concat({ text, tostring(chatType), tostring(db.race), tostring(db.class), db.mood, db.age, db.strength, tostring(db.extras), tostring(db.plainGroups), tostring(BT.keepStamp),
     tostring(db.enabled), tostring(db.preview), tostring(db.chats[chatType or ""]), tostring(BT.InLockdown()) }, "\0")
   if key == lastKey and (lastSpoken == nil or (frame and frame:IsShown())) then return lastSpoken end
   local spoken = BT.PreviewText(text, chatType)

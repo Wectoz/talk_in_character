@@ -22,7 +22,7 @@ function test_elder_opener_and_closer()   -- rolls: aside (1), opener (1) or clo
   assert(S("the road is long", { age = "elder", random = Harness.seq(1, 1, 1) }) == "Hmm... the road is long")
   assert(S("the road is long", { age = "elder", random = Harness.seq(1, 2, 1) }) == "the road is long. Back in my day, we walked.") end
 function test_age_after_voice_and_with_terms()
-  assert(S("hello lfm brd", { race = "t_race", strength = 1, age = "young" }) == "ahoy lfm brd!") end
+  assert(S("hello lfm brd", { race = "t_race", strength = 1, age = "young" }) == "ahoy lfm brd") end
 function test_age_with_mood()
   assert(S("very big", { age = "young", mood = "drunk" }) == "shooo huge!") end
 function test_age_dropped_when_over_255()

@@ -362,18 +362,36 @@ local function BuildVoice(y)
   sample:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
   sample:SetHeight(46)
   Surface(sample, COLOR.reading, COLOR.bronze)
-  sample.typed = Label(sample, "|cffaaaaaaYou type:|r " .. SAMPLE, COLOR.text)
-  sample.typed:SetPoint("TOPLEFT", 8, -7)
+  sample.typed = Label(sample, "You type:", COLOR.muted)
+  sample.typed:SetPoint("TOPLEFT", 8, -8)
+  -- The sample can be typed over, to try any sentence without sending it.
+  local input = CreateFrame("EditBox", nil, sample, "BackdropTemplate")
+  Surface(input, COLOR.surface, COLOR.border)
+  input:SetFontObject("GameFontHighlightSmall")
+  input:SetTextColor(COLOR.text[1], COLOR.text[2], COLOR.text[3])
+  input:SetTextInsets(4, 4, 0, 0)
+  input:SetAutoFocus(false)
+  input:SetMaxLetters(200)
+  input:SetHeight(18)
+  input:SetPoint("LEFT", sample.typed, "RIGHT", 6, 0)
+  input:SetPoint("RIGHT", sample, "RIGHT", -70, 0)
+  input:SetText(SAMPLE)
+  input:SetCursorPosition(0)
+  input:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+  input:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
   sample.seen = Label(sample, "", COLOR.text)
-  sample.seen:SetPoint("TOPLEFT", sample.typed, "BOTTOMLEFT", 0, -5)
+  sample.seen:SetPoint("TOPLEFT", sample.typed, "BOTTOMLEFT", 0, -8)
   sample.seen:SetPoint("RIGHT", -70, 0)
   sample.seen:SetJustifyH("LEFT")
   sample.seen:SetWordWrap(false)
   function sample:Refresh()
     local opts = BT.Options()
     opts.names = nil
-    self.seen:SetText("|cffaaaaaaOthers see:|r " .. BT.Rewrite(SAMPLE, "SAY", opts))
+    local typed = input:GetText()
+    if type(typed) ~= "string" or not typed:find("%S") then typed = SAMPLE end
+    self.seen:SetText("|cffaaaaaaOthers see:|r " .. BT.Rewrite(typed, "SAY", opts))
   end
+  input:SetScript("OnTextChanged", function(_, userInput) if userInput then sample:Refresh() end end)
   local again = TextButton(sample, "Again", 54, function() sample:Refresh() end)
   again:SetPoint("RIGHT", -6, 0)
   refreshers[#refreshers + 1] = sample
@@ -394,7 +412,9 @@ local function BuildAuto(y)
   note:SetJustifyH("LEFT")
   Check(panel, "Show a preview above the chat box", 20, y - 96, function() return db.preview end, function(v) db.preview = v end)
   Check(panel, "Add catchphrases before or after my message", 300, y - 96, function() return db.extras end, function(v) db.extras = v end)
-  return y - 130
+  Check(panel, "Keep game words (need, run, boss) plain in party, raid and battleground chat", 20, y - 120,
+    function() return db.plainGroups end, function(v) db.plainGroups = v end)
+  return y - 154
 end
 
 local function BuildWheel(y)

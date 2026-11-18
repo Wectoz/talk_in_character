@@ -86,7 +86,9 @@ local function Attempt(text, race, class, opts, strength, random, mood, age)
     if run:lower() ~= "xd" then words = words + 1 end
   end
   -- After the count, so a message of nothing but game terms still counts as words.
-  shielded = BT.Terms.Shield(shielded, parts)
+  -- A message with jargon in it is business: it takes the voice, but no age and no mood.
+  local jargon
+  shielded, jargon = BT.Terms.Shield(shielded, parts, opts.keep, opts.game)
   -- A run that touches a byte above 127 is someone's own language: left alone.
   shielded = shielded:gsub("[%a'\128-\255]+", function(run)
     if run:find("[\128-\255]") then return run end
@@ -95,20 +97,21 @@ local function Attempt(text, race, class, opts, strength, random, mood, age)
   local voices = {}
   if race then voices[#voices + 1] = race end
   if class then voices[#voices + 1] = class end
-  if BT.Ages and words >= 1 then shielded = BT.Ages.Apply(shielded, age, random, opts.extras, words, voices) end
+  if BT.Ages and words >= 1 and not jargon then shielded = BT.Ages.Apply(shielded, age, random, opts.extras, words, voices) end
   if words >= 3 and opts.extras ~= false then
     shielded = Interject(shielded, race, strength, random)
     shielded = Interject(shielded, class, strength, random)
   end
   -- An emoticon, a number or a lone link has nothing to say in a mood.
-  if BT.Moods and mood ~= "calm" and words >= 1 then
+  if BT.Moods and mood ~= "calm" and words >= 1 and not jargon then
     shielded = BT.Moods.Apply(shielded, mood, random, voices, opts.extras)
   end
   return BT.Protect.Restore(shielded, parts)
 end
 
 --- opts: { race = id, class = id, mood = "calm"|..., age = "adult"|"young"|"elder", strength = 1|2|3, names = list, random = function(n),
----         extras = false for no opener or closer }
+---         extras = false for no opener or closer, keep = set of the player's own words to leave alone,
+---         game = true to keep everyday game words (need, run, boss) as typed }
 function Engine.Speak(text, opts)
   if type(text) ~= "string" or text:find("^/") or not text:find("%S") then return text end
   local race, class = BT.voices[opts.race or false], BT.voices[opts.class or false]

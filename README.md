@@ -27,12 +27,19 @@ in `TalkInCharacter/Core.lua`.
 to punctuation, and asides that follow the catchphrase setting. A voice gives its own asides
 in `ages = { young = { closers = {...} }, elder = { closers = {...} } }`.
 
+## Chat commands
+
+`/tic` opens the options. `/tic on|off`, `/tic calm|angry|drunk|scared`, `/tic adult|young|elder`
+and `/tic light|medium|heavy` change a setting. `/tic keep <word>` leaves a word of your own as
+typed (and tells Autocorrect Forever to do the same), `/tic forget <word>` undoes it, and
+`/tic kept` lists them.
+
 ## Game terms
 
 `TalkInCharacter/Engine/Terms.lua` lists the words no voice, accent or mood may change.
 `STRICT` terms (LFM, WTS, tank, BRD) are always kept. `LOOSE` terms are everyday words with a
 game meaning (need, run, hit): they are kept only in a message that also holds a strict term.
-A swap whose key is a strict term fails the tests. The strict terms are also handed to Autocorrect
+A message with a strict term in it takes no age and no mood. A swap whose key is a strict term fails the tests. The strict terms are also handed to Autocorrect
 Forever at load (`Send.lua`), so it leaves them as typed.
 
 ## To check in game

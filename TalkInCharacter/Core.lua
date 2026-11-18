@@ -12,7 +12,8 @@ BT.RACE_TOKENS = {
 
 local DEFAULTS = {
   enabled = true, mood = "calm", age = "adult", strength = 2, preview = true, extras = false,
-  wheel = true, wheelChat = "SAY", matched = false,
+  wheel = true, wheelChat = "SAY", matched = false, plainGroups = false,
+  keep = {}, -- keep[word] = true: the player's own words, never changed (/tic keep)
   chats = {
     SAY = true, YELL = true, EMOTE = true, PARTY = true, RAID = true, GUILD = true, WHISPER = true,
     OFFICER = false, INSTANCE_CHAT = false, CHANNEL = false,
@@ -67,14 +68,47 @@ frame:SetScript("OnEvent", function(_, event, name)
 end)
 
 SLASH_TALKINCHARACTER1, SLASH_TALKINCHARACTER2 = "/talkincharacter", "/tic"
+local MOODS = { calm = true, angry = true, drunk = true, scared = true }
+local AGES = { adult = true, young = true, elder = true }
+local STRENGTHS = { light = 1, medium = 2, heavy = 3 }
+local HELP = "/tic on, off | calm, angry, drunk, scared | adult, young, elder | light, medium, heavy | "
+  .. "keep <word>, forget <word>, kept"
+
+--- Passes a kept word on to Autocorrect Forever, so one command covers both addons.
+local function TellAutocorrect(command)
+  local other = SlashCmdList.AUTOCORRECTFOREVER
+  if type(other) == "function" then pcall(other, command) end
+end
+
 SlashCmdList.TALKINCHARACTER = function(input)
-  local verb = (input or ""):lower():match("^%s*(%S*)")
+  local db = BT.db
+  local verb, rest = (input or ""):lower():match("^%s*(%S*)%s*(.-)%s*$")
   if verb == "on" or verb == "off" then
-    BT.db.enabled = verb == "on"
+    db.enabled = verb == "on"
     BT.Print(verb == "on" and "on. Your chat is spoken in your voice." or "off. Your chat goes out as typed.")
-  elseif BT.OpenOptions then
-    BT.OpenOptions()
+  elseif MOODS[verb] then
+    db.mood = verb
+    BT.Print("mood: " .. verb)
+  elseif AGES[verb] then
+    db.age = verb
+    BT.Print("age: " .. verb)
+  elseif STRENGTHS[verb] then
+    db.strength = STRENGTHS[verb]
+    BT.Print("strength: " .. verb)
+  elseif (verb == "keep" or verb == "forget") and rest:find("^[%w\128-\255]+$") then
+    db.keep[rest] = verb == "keep" or nil
+    BT.keepStamp = (BT.keepStamp or 0) + 1
+    TellAutocorrect(verb .. " " .. rest)
+    BT.Print(verb == "keep" and (rest .. " will be left as typed.") or (rest .. " is no longer kept."))
+  elseif verb == "kept" then
+    local words = {}
+    for word in pairs(db.keep) do words[#words + 1] = word end
+    table.sort(words)
+    BT.Print(#words > 0 and ("kept words: " .. table.concat(words, ", ")) or "no kept words. /tic keep <word> adds one.")
+  elseif verb == "" and BT.OpenOptions then
+    return BT.OpenOptions()
   else
-    BT.Print("/tic on, /tic off")
+    BT.Print(HELP)
   end
+  if BT.RefreshOptions then BT.RefreshOptions() end
 end
