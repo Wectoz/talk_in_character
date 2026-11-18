@@ -1,5 +1,5 @@
 -- Every shipped voice loads (so it validates) and meets the quality bar.
-local files = { "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua" }
+local files = { "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua" }
 for path in io.popen("find TalkInCharacter/Voices -name '*.lua' | sort"):lines() do
   files[#files + 1] = path:gsub("^TalkInCharacter/", "")
 end
@@ -86,3 +86,7 @@ function test_ing_rule_spares_short_nouns()
   end) end
 function test_no_is_only_swapped_at_heavy_strength()
   each(function(id, v) assert(not v.swaps.no or v.swaps.no.tier == 3, id .. " swaps 'no' below heavy strength") end) end
+function test_no_voice_swaps_a_strict_game_term()
+  each(function(id, v)
+    for key in pairs(v.swaps) do assert(not BT.Terms.strict[key], id .. " swaps the game term '" .. key .. "'") end
+  end) end

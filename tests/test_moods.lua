@@ -1,4 +1,4 @@
-local BT = Harness.load({ "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua" })
+local BT = Harness.load({ "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua" })
 dofile("tests/testvoices.lua")(BT)
 local A = function(t, m, ...) return BT.Moods.Apply(t, m, Harness.seq(...), {}) end
 local function never() return 99 end

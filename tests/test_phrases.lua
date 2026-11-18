@@ -1,4 +1,4 @@
-local BT = Harness.load({ "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua", "Engine/Phrases.lua" })
+local BT = Harness.load({ "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua", "Engine/Phrases.lua" })
 dofile("tests/testvoices.lua")(BT)
 local P = BT.Phrases
 

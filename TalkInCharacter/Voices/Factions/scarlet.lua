@@ -56,8 +56,6 @@ BT.RegisterVoice({
     war = { tier = 2, "holy war" },
     quest = { tier = 2, "sacred duty" },
     weak = { tier = 2, "impure" },
-    tank = { tier = 2, "champion" },
-    healer = { tier = 2, "chaplain" },
     -- heavy
     gold = { tier = 3, "tithes" },
     money = { tier = 3, "tithes" },

@@ -27,7 +27,6 @@ BT.RegisterVoice({
     gods = { tier = 1, "loa" },
     spirits = { tier = 1, "loa" },
     curse = { tier = 1, "hex" },
-    healer = { tier = 1, "witch doctor" },
     relax = { tier = 1, "take it easy" },
     -- medium: da, dis, dat
     the = { tier = 2, "da" },

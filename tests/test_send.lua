@@ -1,5 +1,5 @@
 dofile("tests/stubs.lua")
-local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
+local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
   "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua", "Options.lua" })
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "TalkInCharacter")

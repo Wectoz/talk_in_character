@@ -86,6 +86,17 @@ function BT.Rewrite(text, chatType, opts)
   return text
 end
 
+-- Autocorrect Forever builds its dictionary from this list at login, after every addon file has
+-- loaded. A word in it is left as typed, so "strat" is no longer made into "start".
+if type(AutocorrectForever_Known) == "string" then
+  local words = {}
+  for term in pairs(BT.Terms.strict) do
+    words[#words + 1] = term
+    if term:sub(-1) ~= "s" then words[#words + 1] = term .. "s" end
+  end
+  AutocorrectForever_Known = AutocorrectForever_Known .. " " .. table.concat(words, " ")
+end
+
 local busy = false
 local function OnPreSendText(_, box)
   if busy or type(box) ~= "table" or type(box.GetText) ~= "function" then return end

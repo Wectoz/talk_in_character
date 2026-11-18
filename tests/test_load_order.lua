@@ -8,7 +8,10 @@ for line in io.lines("TalkInCharacter/TalkInCharacter.toc") do
   if line:find("%.lua$") then files[#files + 1] = (line:gsub("\\", "/")) end
 end
 TalkInCharacterCharDB = nil
+AutocorrectForever_Known = "seed"   -- as Autocorrect Forever leaves it before login
 local BT = Harness.load(files)
+local taughtWords = " " .. AutocorrectForever_Known .. " "
+AutocorrectForever_Known = nil
 Stub.race, Stub.class = "Gnome", "MAGE"
 Stub.Event("ADDON_LOADED", "TalkInCharacter")
 Stub.Event("PLAYER_LOGIN")
@@ -40,3 +43,6 @@ function test_binding_names_match_bindings_xml()
   local xml = io.open("TalkInCharacter/Bindings.xml"):read("*a")
   local name, header, body = xml:match('name="([^"]+)"'), xml:match('header="([^"]+)"'), xml:match(">%s*([%w_]+)%(keystate%)")
   assert(_G["BINDING_NAME_" .. name] and _G["BINDING_HEADER_" .. header] and type(_G[body]) == "function") end
+function test_autocorrect_forever_is_taught_the_game_terms()
+  for _, word in ipairs({ "seed", "strat", "strats", "brez", "lfm" }) do
+    assert(taughtWords:find(" " .. word .. " ", 1, true), word .. " was not taught") end end

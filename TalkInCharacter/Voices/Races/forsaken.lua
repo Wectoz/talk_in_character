@@ -61,7 +61,6 @@ BT.RegisterVoice({
     house = { tier = 2, "crypt" },
     idiot = { tier = 2, "maggot" },
     noob = { tier = 2, "fresh corpse" },
-    healer = { tier = 2, "apothecary" },
     heal = { tier = 2, "stitch up" },
     forever = { tier = 2, "until the rot takes us" },
     -- heavy

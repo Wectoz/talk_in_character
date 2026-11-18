@@ -1,4 +1,4 @@
-local BT = Harness.load({ "Engine/Protect.lua", "Engine/Voices.lua", "Engine/Engine.lua" })
+local BT = Harness.load({ "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua" })
 dofile("tests/testvoices.lua")(BT)
 local function never() return 99 end
 local S = function(t, o) o.random = o.random or never return BT.Engine.Speak(t, o) end

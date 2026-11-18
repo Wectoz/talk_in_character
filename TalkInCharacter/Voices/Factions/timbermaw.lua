@@ -61,7 +61,6 @@ BT.RegisterVoice({
     old = { tier = 2, "grey-furred" },
     gods = { tier = 2, "spirits" },
     magic = { tier = 2, "spirit ways" },
-    healer = { tier = 2, "shaman" },
     town = { tier = 2, "big den" },
     city = { tier = 2, "big den" },
     happy = { tier = 2, "warm in belly" },

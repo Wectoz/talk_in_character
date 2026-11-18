@@ -74,6 +74,8 @@ local function Attempt(text, race, class, opts, strength, random, mood)
   for run in shielded:gmatch("%a%a+") do
     if run:lower() ~= "xd" then words = words + 1 end
   end
+  -- After the count, so a message of nothing but game terms still counts as words.
+  shielded = BT.Terms.Shield(shielded, parts)
   -- A run that touches a byte above 127 is someone's own language: left alone.
   shielded = shielded:gsub("[%a'\128-\255]+", function(run)
     if run:find("[\128-\255]") then return run end

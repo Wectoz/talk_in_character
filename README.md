@@ -21,6 +21,14 @@ Copy a file under `TalkInCharacter/Voices/`, change the `id`, write the voice, r
 "Match my character" pick it for a playable race, add the race's file token to `RACE_TOKENS`
 in `TalkInCharacter/Core.lua`.
 
+## Game terms
+
+`TalkInCharacter/Engine/Terms.lua` lists the words no voice, accent or mood may change.
+`STRICT` terms (LFM, WTS, tank, BRD) are always kept. `LOOSE` terms are everyday words with a
+game meaning (need, run, hit): they are kept only in a message that also holds a strict term.
+A swap whose key is a strict term fails the tests. The strict terms are also handed to Autocorrect
+Forever at load (`Send.lua`), so it leaves them as typed.
+
 ## To check in game
 
 Forever may offer races or classes beyond the classic eight and nine. To list race tokens:
