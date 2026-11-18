@@ -65,8 +65,8 @@ local function Build()
   Circle(frame, "BACKGROUND", 3, INNER * 2 - 3, 0.051, 0.043, 0.031, 1)
   frame.glow = Circle(frame, "BORDER", 0, 52, 0.725, 0.541, 0.243, 1)       -- behind the picked label
   frame.mark = frame:CreateTexture(nil, "ARTWORK")
-  frame.mark:SetTexture("Interface\\AddOns\\TalkInCharacter\\Media\\infinity")
-  frame.mark:SetSize(32, 16)
+  frame.mark:SetTexture("Interface\\AddOns\\TalkInCharacter\\Media\\mark")
+  frame.mark:SetSize(36, 36)
   frame.mark:SetPoint("CENTER")
   frame.labels = {}
   for slot, kind in ipairs(BT.KINDS) do

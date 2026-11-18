@@ -8,12 +8,15 @@
 - Option: catchphrases before or after a message (off by default). A closer now follows a full stop.
 - Option: keep game words plain in party, raid and battleground chat.
 - The options sample can be typed over to try any sentence.
+- About sixty more everyday words in each of the eight race voices.
 
 **Autocorrect Forever**
 - Game terms are taught to Autocorrect Forever, so it stops changing them ("strat" to "start", "brez" to "brew").
 - Kept words are passed on to its keep list.
 
 **Changed**
+- A new character starts with only Say and Yell ticked. Your existing characters keep their settings.
+- New pixel-art icon.
 - Redesigned options panel: aligned columns, hover help, a larger sample, and scrolling when the panel is short.
 - The Strength slider drags freely and takes the mouse wheel.
 - Removed swaps that renamed "tank" and "healer".

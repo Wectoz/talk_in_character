@@ -15,7 +15,8 @@ local DEFAULTS = {
   wheel = true, wheelChat = "SAY", matched = false, plainGroups = false,
   keep = {}, -- keep[word] = true: the player's own words, never changed (/tic keep)
   chats = {
-    SAY = true, YELL = true, EMOTE = true, PARTY = true, RAID = true, GUILD = true, WHISPER = true,
+    -- Only what is said aloud to begin with: the rest is for the player to tick.
+    SAY = true, YELL = true, EMOTE = false, PARTY = false, RAID = false, GUILD = false, WHISPER = false,
     OFFICER = false, INSTANCE_CHAT = false, CHANNEL = false,
   },
 }

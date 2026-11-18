@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Draws the Talk in Character icon: a laughing gold mask in a speech bubble, as pixel art, and
-Forever's infinity mark for the wheel and the panel.
+the face alone as a small mark for the wheel and the panel.
 
 No image library is needed: shapes are signed distance functions, written out as PNG and TGA
 with the standard library.  Run from the repo root:  python3 tools/make_icon.py
 Outputs: curseforge/icon.png (448x448), TalkInCharacter/Media/icon.tga (64x64),
-         TalkInCharacter/Media/infinity.tga (64x32, transparent, for the wheel and the panel).
+         TalkInCharacter/Media/mark.tga (64x64, transparent, for the wheel and the panel).
 """
 import math
 import os
@@ -128,20 +128,16 @@ def render_icon(size):
     return [[cells[j * GRID // size][i * GRID // size] for i in range(size)] for j in range(size)]
 
 
-def render_mark(width, height):
-    """The infinity mark alone on a transparent ground."""
-    loop = lemniscate(0.5, 0.25, 0.44, 1.5)
-    px = 1.0 / width
+def render_mark(size=64):
+    """The laughing face alone on a transparent ground: 16 grid cells across, cut from the icon."""
     rows = []
-    for j in range(height):
-        y = (j + 0.5) * px
+    for j in range(size):
+        gy = 7 + j * 16 // size
         row = []
-        for i in range(width):
-            x = (i + 0.5) * px
-            dl = sd_polyline(x, y, loop)
-            alpha = cover(dl - 0.055, px)
-            c = bronze(0.1 + 0.8 * y / 0.5)
-            row.append((int(c[0]), int(c[1]), int(c[2]), int(alpha * 255 + 0.5)))
+        for i in range(size):
+            gx = 8 + i * 16 // size
+            inside = sd_face((gx + 0.5) / GRID, (gy + 0.5) / GRID) < 0
+            row.append(pixel(gx, gy) + (255,) if inside else (0, 0, 0, 0))
         rows.append(row)
     return rows
 
@@ -175,6 +171,5 @@ if __name__ == "__main__":
     write_png("curseforge/icon.png", render_icon(448))
     small = render_icon(64)
     write_tga("TalkInCharacter/Media/icon.tga", small)
-    mark = render_mark(64, 32)
-    write_tga("TalkInCharacter/Media/infinity.tga", mark)
-    print("wrote curseforge/icon.png, TalkInCharacter/Media/icon.tga, TalkInCharacter/Media/infinity.tga")
+    write_tga("TalkInCharacter/Media/mark.tga", render_mark())
+    print("wrote curseforge/icon.png, TalkInCharacter/Media/icon.tga, TalkInCharacter/Media/mark.tga")

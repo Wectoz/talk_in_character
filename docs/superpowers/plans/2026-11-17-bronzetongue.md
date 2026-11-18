@@ -1,3 +1,6 @@
+> Historical: written before version 1.0.0, under the working name "Bronzetongue". The addon is now
+> Talk in Character, and later features are not described here. See the README.
+
 # Bronzetongue Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

@@ -9,10 +9,13 @@ See `curseforge/description.md` for the player-facing description.
 - `tests/` tests that run outside the game: `lua5.1 tests/run.lua`
 - `tools/sync.sh` copies the addon into the Forever AddOns folder.
 - `tools/gen_toc.sh` rewrites the file list in the TOC. Run it after adding a voice file.
-- `tools/make_icon.py` draws the icon files.
+- `tools/make_icon.py` draws the icon files: the addon icon, the small mark, and `curseforge/icon.png`.
 - `tools/check_icons.sh` checks every voice icon is a real game icon (needs internet).
 - `tools/package.py` builds `dist/TalkInCharacter-<version>.zip` for CurseForge.
+- `curseforge/` the CurseForge page text, logo and changelogs.
 - `docs/in-game-checklist.md` what to check in the game before releasing.
+- `docs/superpowers/` the first design and plan, kept as history. They use the working name
+  "Bronzetongue" and describe version 1.0.0 only.
 
 ## Adding a voice
 

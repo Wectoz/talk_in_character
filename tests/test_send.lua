@@ -4,6 +4,7 @@ local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Terms.lua", 
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "TalkInCharacter")
 BT.db.race, BT.db.class, BT.db.strength, BT.db.matched = "t_race", nil, 1, true
+BT.db.chats.EMOTE = true   -- the emote tests need it; only say and yell start ticked
 
 local function send(text, chatType)
   local b = FakeBox(text, chatType)
@@ -17,8 +18,9 @@ function test_other_addon_loading_is_ignored()
   local before = BT.db Stub.Event("ADDON_LOADED", "SomethingElse") assert(BT.db == before) end
 function test_say_rewritten()        assert(send("hello", "SAY") == "ahoy") end
 function test_each_default_chat()
-  for _, t in ipairs({ "SAY", "YELL", "PARTY", "RAID", "GUILD", "WHISPER" }) do assert(send("hello", t) == "ahoy", t) end
-  for _, t in ipairs({ "OFFICER", "INSTANCE_CHAT", "CHANNEL" }) do assert(send("hello", t) == "hello", t) end end
+  for _, t in ipairs({ "SAY", "YELL" }) do assert(send("hello", t) == "ahoy", t) end
+  for _, t in ipairs({ "PARTY", "RAID", "GUILD", "WHISPER", "OFFICER", "INSTANCE_CHAT", "CHANNEL" }) do
+    assert(send("hello", t) == "hello", t) end end
 function test_unticked_chat_untouched() assert(send("hello", "OFFICER") == "hello") end
 function test_ticking_a_chat_enables_it()
   BT.db.chats.OFFICER = true assert(send("hello", "OFFICER") == "ahoy") BT.db.chats.OFFICER = false end
@@ -58,7 +60,7 @@ function test_secret_target_name_is_skipped()
   Stub.targetName = nil Stub.targetSecret = false end
 function test_defaults_filled_on_old_save()
   local old = { enabled = false, chats = { SAY = false } } BT.ApplyDefaults(old)
-  assert(old.enabled == false and old.chats.SAY == false and old.chats.GUILD == true and old.strength == 2) end
+  assert(old.enabled == false and old.chats.SAY == false and old.chats.YELL == true and old.chats.GUILD == false and old.strength == 2) end
 function test_match_character()
   local race, class = BT.db.race, BT.db.class
   BT.RACE_TOKENS.TestRace = "t_race" Stub.race = "TestRace" Stub.class = "T_CLASS" BT.MatchCharacter()

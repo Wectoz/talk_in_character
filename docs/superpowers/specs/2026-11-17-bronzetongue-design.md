@@ -1,3 +1,6 @@
+> Historical: written before version 1.0.0, under the working name "Bronzetongue". The addon is now
+> Talk in Character, and later features are not described here. See the README.
+
 # Bronzetongue: design
 
 A World of Warcraft: Forever addon that makes your chat sound like a chosen race or faction

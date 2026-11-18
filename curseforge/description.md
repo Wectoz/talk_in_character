@@ -33,7 +33,7 @@ Nobody wants "LFM" turned into pirate. Talk in Character knows several hundred W
 
 Links, player names, raid icons and slash commands are never touched either. If there is a word of your own you want left alone, like your guild's name, add it in the options or type `/tic keep <word>`.
 
-You also choose which chats it works in: say, yell, emote, party, raid, guild, officer, whisper, instance and channels each have their own switch.
+You also choose which chats it works in. It starts with say and yell only; emote, party, raid, guild, officer, whisper, instance and channels each have their own switch for when you want more.
 
 ## Handy to know
 
