@@ -1,5 +1,5 @@
 dofile("tests/stubs.lua")
-local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Moods.lua",
+local BT = Harness.load({ "Core.lua", "Engine/Protect.lua", "Engine/Terms.lua", "Engine/Voices.lua", "Engine/Engine.lua", "Engine/Ages.lua", "Engine/Moods.lua",
   "Engine/Phrases.lua", "Send.lua", "Preview.lua", "Wheel.lua", "Options.lua" })
 dofile("tests/testvoices.lua")(BT)
 Stub.Event("ADDON_LOADED", "TalkInCharacter")
@@ -234,3 +234,10 @@ function test_preview_does_not_recompute_unchanged_text()
   BT.db.strength = 2 assert(BT.PreviewTick() == "ahoy" and calls == 2) BT.db.strength = 1
   Stub.activeBox.text = "hello you" BT.PreviewTick() assert(calls == 3)
   BT.Engine.Speak = real Stub.activeBox = nil end
+function test_autocorrect_link_check()
+  Stub.prints = 0
+  assert(BT.CheckAutocorrect() == true and Stub.prints == 0)   -- not installed: nothing to say
+  _G.AutocorrectForever = { Test = function() return "We start now" end }
+  local linked = BT.CheckAutocorrect()
+  _G.AutocorrectForever = nil
+  assert(linked == false and Stub.prints == 1 and Stub.printed:find("strat", 1, true)) end

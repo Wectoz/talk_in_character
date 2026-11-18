@@ -17,6 +17,14 @@ local function Recase(word, output)
   return output
 end
 
+--- `text` with `line` after it. A sentence left open is closed first, so the line reads as
+--- a sentence of its own.
+function Engine.Append(text, line)
+  local body = text:gsub("%s+$", "")
+  if body:find("[%w\2]$") then body = body .. "." end
+  return body .. " " .. line
+end
+
 local function Swap(voice, lower, strength, random)
   local swap = voice and voice.swaps[lower]
   if not swap or swap.tier > strength then return nil end
@@ -31,8 +39,9 @@ local function Sounds(voice, lower, strength)
   return lower
 end
 
---- One word (ASCII letters and apostrophes) through the race voice, then the class voice.
-local function Word(word, race, class, strength, random)
+--- One word (ASCII letters and apostrophes) through the race voice, then the class voice, then
+--- the age. The first to know the word has it: an age never changes what a voice said.
+local function Word(word, race, class, strength, random, age)
   local lead, core = word:match("^('*)(.*)$")
   if core == "" then return word end
   local lower = core:lower()
@@ -46,6 +55,8 @@ local function Word(word, race, class, strength, random)
     end
   end
   if swapped then return lead .. Recase(core, swapped) end
+  local aged = BT.Ages and BT.Ages.Word(lower, age)
+  if aged then return lead .. Recase(core, aged) end
   if #lower < 4 or strength < 2 then return word end
   -- Sound rules are written for lower case, so only plainly cased words take them.
   if core ~= lower and core ~= core:upper() and not core:find("^%u%l+'?%l*$") then return word end
@@ -63,10 +74,10 @@ local function Interject(text, voice, strength, random)
   local opener = random(2) == 1
   if opener and #openers == 0 then opener = false elseif not opener and #closers == 0 then opener = true end
   if opener then return openers[random(#openers)] .. " " .. text end
-  return text .. " " .. closers[random(#closers)]
+  return Engine.Append(text, closers[random(#closers)])
 end
 
-local function Attempt(text, race, class, opts, strength, random, mood)
+local function Attempt(text, race, class, opts, strength, random, mood, age)
   local shielded, parts = BT.Protect.Shield(text, opts.names)
   -- Words as typed: counted before any swap, and without the words inside a link or a name.
   -- "xD" is a face, not a word.
@@ -79,36 +90,38 @@ local function Attempt(text, race, class, opts, strength, random, mood)
   -- A run that touches a byte above 127 is someone's own language: left alone.
   shielded = shielded:gsub("[%a'\128-\255]+", function(run)
     if run:find("[\128-\255]") then return run end
-    return Word(run, race, class, strength, random)
+    return Word(run, race, class, strength, random, age)
   end)
-  if words >= 3 then
+  local voices = {}
+  if race then voices[#voices + 1] = race end
+  if class then voices[#voices + 1] = class end
+  if BT.Ages and words >= 1 then shielded = BT.Ages.Apply(shielded, age, random, opts.extras, words, voices) end
+  if words >= 3 and opts.extras ~= false then
     shielded = Interject(shielded, race, strength, random)
     shielded = Interject(shielded, class, strength, random)
   end
   -- An emoticon, a number or a lone link has nothing to say in a mood.
   if BT.Moods and mood ~= "calm" and words >= 1 then
-    local voices = {}
-    if race then voices[#voices + 1] = race end
-    if class then voices[#voices + 1] = class end
-    shielded = BT.Moods.Apply(shielded, mood, random, voices)
+    shielded = BT.Moods.Apply(shielded, mood, random, voices, opts.extras)
   end
   return BT.Protect.Restore(shielded, parts)
 end
 
---- opts: { race = id, class = id, mood = "calm"|..., strength = 1|2|3, names = list, random = function(n) }
+--- opts: { race = id, class = id, mood = "calm"|..., age = "adult"|"young"|"elder", strength = 1|2|3, names = list, random = function(n),
+---         extras = false for no opener or closer }
 function Engine.Speak(text, opts)
   if type(text) ~= "string" or text:find("^/") or not text:find("%S") then return text end
   local race, class = BT.voices[opts.race or false], BT.voices[opts.class or false]
-  local mood = opts.mood or "calm"
-  if not race and not class and mood == "calm" then return text end
+  local mood, age = opts.mood or "calm", opts.age or "adult"
+  if not race and not class and mood == "calm" and age == "adult" then return text end
   local random = opts.random or math.random
   local strength = opts.strength or 2
   for attempt = strength, 1, -1 do
-    local result = Attempt(text, race, class, opts, attempt, random, mood)
+    local result = Attempt(text, race, class, opts, attempt, random, mood, age)
     if #result <= MAX_BYTES then return result end
   end
-  if mood ~= "calm" then
-    local result = Attempt(text, race, class, opts, 1, random, "calm")
+  if mood ~= "calm" or age ~= "adult" then
+    local result = Attempt(text, race, class, opts, 1, random, "calm", "adult")
     if #result <= MAX_BYTES then return result end
   end
   return text

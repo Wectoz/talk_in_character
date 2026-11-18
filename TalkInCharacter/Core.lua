@@ -11,7 +11,7 @@ BT.RACE_TOKENS = {
 }
 
 local DEFAULTS = {
-  enabled = true, mood = "calm", strength = 2, preview = true,
+  enabled = true, mood = "calm", age = "adult", strength = 2, preview = true, extras = false,
   wheel = true, wheelChat = "SAY", matched = false,
   chats = {
     SAY = true, YELL = true, EMOTE = true, PARTY = true, RAID = true, GUILD = true, WHISPER = true,
@@ -56,9 +56,13 @@ frame:SetScript("OnEvent", function(_, event, name)
     if name ~= ADDON then return end
     if type(TalkInCharacterCharDB) ~= "table" then TalkInCharacterCharDB = {} end
     BT.db = BT.ApplyDefaults(TalkInCharacterCharDB)
-  elseif event == "PLAYER_LOGIN" and BT.db and not BT.db.matched then
-    BT.MatchCharacter()
-    BT.db.matched = true
+  elseif event == "PLAYER_LOGIN" then
+    if BT.db and not BT.db.matched then
+      BT.MatchCharacter()
+      BT.db.matched = true
+    end
+    -- A moment later, so Autocorrect Forever has built its dictionary whichever addon logs in first.
+    if C_Timer and C_Timer.After and BT.CheckAutocorrect then C_Timer.After(3, BT.CheckAutocorrect) end
   end
 end)
 

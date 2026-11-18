@@ -86,6 +86,8 @@ BT.RegisterVoice({
     "Let's circle back:" },
   closers = { "Check your contract.", "That is coming out of your wages.", "Quotas don't fill themselves.",
     "Venture Co. thanks you for your sacrifice.", "Read the fine print.", "Back to the dig." },
+  ages = { young = { closers = { "It's my first day on the job!", "I'll make supervisor by Friday!" } },
+    elder = { closers = { "Forty years with the company. No pension.", "I remember when overtime was paid." } } },
   moods = { angry = { closers = { "You're fired!", "This is going in your file!", "Consider your contract terminated!",
     "Workers are cheap. Remember that." } } },
   phrases = {

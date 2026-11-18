@@ -73,6 +73,8 @@ BT.RegisterVoice({
   },
   openers = { "Ey mon,", "Hey mon,", "Ya know,", "By da loa,", "Listen up, mon," },
   closers = { "Ya mon.", "Stay away from da voodoo.", "Da loa be watchin'.", "No worries, mon.", "Dat be da truth." },
+  ages = { young = { closers = { "Me tusks be growin' in, mon!", "Da loa gonna notice me one day!" } },
+    elder = { closers = { "Dese old tusks seen many moons, mon.", "Back in da jungle, we had real voodoo." } } },
   moods = { angry = { closers = { "I gonna shrink ya head!", "Ya just made da loa angry, mon!", "Dere be a hex comin' ya way!", "Taz'dingo!" } } },
   phrases = {
     hello = { "Hey mon! How ya doin', {target}?", "Greetings, mon.", "Ya be lookin' good today, {targetRace}.",

@@ -46,6 +46,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Hush,", "Tracks say", "Easy now,", "From what I can smell,", "Patience," },
   closers = { "My pet agrees.", "The tracks do not lie.", "Mind the trap.", "Slow and steady fills the pot.", "I have fed the pet, before you ask." },
+  ages = { young = { closers = { "My pet likes me best!", "I tracked it all by myself!" } },
+    elder = { closers = { "I have outlived a dozen good hounds.", "My eyes are dim, but my aim is true." } } },
   moods = { angry = { closers = { "My pet has not eaten today. Think on that.", "I can track you anywhere.", "You just stepped in my trap!", "Sic 'em!" } } },
   phrases = {
     hello = { "Well met, {target}. Do not startle the pet.", "Hello. I heard you coming a mile off.", "Greetings. He only bites strangers.",

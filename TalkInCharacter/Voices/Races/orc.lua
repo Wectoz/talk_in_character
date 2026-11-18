@@ -78,6 +78,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Lok'tar!", "Hear me,", "Blood and thunder!", "By my axe,", "Hah!" },
   closers = { "For the Horde!", "Lok'tar ogar!", "Strength and honor.", "Zug zug.", "Victory or death!" },
+  ages = { young = { closers = { "I will earn my first scar today!", "One day I'll have my own wolf!" } },
+    elder = { closers = { "I remember Draenor, pup.", "My axe is older than your clan." } } },
   moods = { angry = { closers = { "You have no honor!", "My axe grows thirsty!", "I will break you in half!", "Blood and thunder!" } } },
   phrases = {
     hello = { "Lok'tar, {target}!", "Throm-ka, {targetClass}.", "Lok'tar! You look strong. Good.",

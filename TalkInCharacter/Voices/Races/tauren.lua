@@ -70,6 +70,8 @@ BT.RegisterVoice({
   openers = { "Hail,", "Peace,", "The winds tell me,", "By the Earth Mother,", "Hmm," },
   closers = { "Walk with the Earth Mother.", "The winds guide you.", "So the ancestors teach.",
     "May the hunt be good.", "The Earth Mother is near." },
+  ages = { young = { closers = { "My horns are almost grown!", "Can we race across the plains?" } },
+    elder = { closers = { "These hooves have walked every plain.", "The Earth Mother has kept me long." } } },
   moods = { angry = { closers = { "You try the patience of the ancestors!", "Even the plains grow dark with storm!",
     "Do not stand before the stampede!" } } },
   phrases = {

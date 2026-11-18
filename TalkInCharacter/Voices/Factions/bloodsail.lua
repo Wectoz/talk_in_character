@@ -73,6 +73,8 @@ BT.RegisterVoice({
   },
   openers = { "Arr,", "Yo ho,", "Shiver me timbers,", "By the Bloodsail colours," },
   closers = { "Arr!", "Yo ho ho!", "Savvy?", "...or ye walk the plank!" },
+  ages = { young = { closers = { "Me first voyage, arr!", "I be cabin boy no more! Nearly." } },
+    elder = { closers = { "I've sailed more seas than ye've seen puddles.", "This old salt remembers bigger ships." } } },
   moods = { angry = { closers = { "Ye'll walk the plank fer this!", "Blast yer eyes!", "I'll feed ye to the sharks!" } } },
   phrases = {
     hello = { "Ahoy, {target}!", "Ahoy there, matey!", "Well blow me down, a {targetRace}! Ahoy!",

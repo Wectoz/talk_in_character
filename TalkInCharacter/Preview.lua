@@ -45,7 +45,7 @@ local function Update(box)
   if not BT.Readable(text) then Hide() return nil end
   -- Typing pauses far outnumber key presses: work only when the text or a setting changed.
   local db = BT.db
-  local key = table.concat({ text, tostring(chatType), tostring(db.race), tostring(db.class), db.mood, db.strength,
+  local key = table.concat({ text, tostring(chatType), tostring(db.race), tostring(db.class), db.mood, db.age, db.strength, tostring(db.extras),
     tostring(db.enabled), tostring(db.preview), tostring(db.chats[chatType or ""]), tostring(BT.InLockdown()) }, "\0")
   if key == lastKey and (lastSpoken == nil or (frame and frame:IsShown())) then return lastSpoken end
   local spoken = BT.PreviewText(text, chatType)

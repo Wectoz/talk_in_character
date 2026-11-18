@@ -72,6 +72,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Patience,", "As the seasons turn,", "Hear the wind,", "By root and branch,", "Gently now," },
   closers = { "All things in balance.", "Nature provides.", "So the seasons turn.", "The grove remembers.", "Be as the oak." },
+  ages = { young = { closers = { "I planted my first seed today!", "The saplings and I are the same age!" } },
+    elder = { closers = { "I have watched this grove through a hundred seasons.", "Old roots run deepest." } } },
   moods = { angry = { closers = { "Even the oak has thorns!", "You try the patience of the forest!", "Nature's wrath is slow, but it comes!",
     "The storm does not ask twice!" } } },
   phrases = {

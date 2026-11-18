@@ -49,6 +49,8 @@ BT.RegisterVoice({
   openers = { "Light be with you,", "Have faith,", "Peace, child,", "By the Light,", "Bless you," },
   closers = { "Light be with you.", "Have faith.", "I shall pray for you.", "The Light provides.",
     "Pay no mind to the whispers." },
+  ages = { young = { closers = { "I know all the prayers by heart!", "My first blessing worked!" } },
+    elder = { closers = { "I have prayed longer than you have lived.", "Bless these old knees." } } },
   moods = { angry = { closers = { "Even my patience has an end!", "The Light forgives. I am less sure that I do.",
     "Do not make me show you the shadow!", "I will pray for you. You will need it." } } },
   phrases = {

@@ -51,6 +51,8 @@ BT.RegisterVoice({
   openers = { "Heh heh,", "Between us,", "The demons tell me,", "Oh, how delicious,", "For a small price," },
   closers = { "Heh heh heh.", "Your soul is safe. Probably.", "It only stings a little.", "The price is fair, I promise.",
     "I regret nothing." },
+  ages = { young = { closers = { "My imp does what I say! Mostly.", "I read the forbidden book already!" } },
+    elder = { closers = { "My soul was spent long ago.", "I have outlived every demon I bound." } } },
   moods = { angry = { closers = { "Your soul shall suffer!", "I have a curse with your name on it!",
     "My felhound has not eaten today. Think on that.", "I will keep you in a very small shard!" } } },
   phrases = {

@@ -64,3 +64,5 @@ function test_xd_is_an_emoticon_not_a_word()
     assert(BT.Engine.Speak(text, { race = "t_race", strength = 3, mood = "angry", random = function() return 1 end }) == text) end end
 function test_short_words_still_take_a_mood()
   assert(BT.Engine.Speak("no", { race = "t_race", strength = 1, mood = "angry", random = function() return 99 end }) == "no!") end
+function test_angry_closer_can_be_switched_off()
+  assert(BT.Moods.Apply("stop that", "angry", function() return 30 end, {}, false) == "stop that!") end

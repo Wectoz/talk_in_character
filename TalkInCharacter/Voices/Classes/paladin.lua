@@ -47,6 +47,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "By the Light,", "In the name of justice,", "Hear me,", "Light willing,", "As the Light teaches," },
   closers = { "The Light wills it.", "Justice will be done.", "Honour demands it.", "Light be with you.", "There is a lesson in that." },
+  ages = { young = { closers = { "The Light picked me, you know!", "My hammer is nearly too heavy!" } },
+    elder = { closers = { "The Light has kept me many winters.", "I took my vows before you were born." } } },
   moods = { angry = { closers = { "You will answer to the Light!", "Justice comes for you!", "Repent, while I am still asking nicely!", "My hammer has heard enough!" } } },
   phrases = {
     hello = { "Light be with you, {target}.", "Well met, friend. Walk in the Light.", "Greetings, {targetClass}. Is your cause just?",

@@ -78,6 +78,8 @@ BT.RegisterVoice({
   openers = { "By Elune,", "Hear me,", "The stars whisper it:", "In the name of the Goddess,", "Patience," },
   closers = { "Elune be praised.", "So the forest remembers.", "The stars have seen it.", "Such is the way of things.",
     "I have waited longer for less." },
+  ages = { young = { closers = { "I'm barely three hundred, you know!", "Did you see the wisps?" } },
+    elder = { closers = { "Ten thousand years ago, this was all forest.", "I have outlived empires, child." } } },
   moods = { angry = { closers = { "You try the patience of an immortal!", "The forest will not forgive this.",
     "Tor ilisar'thera'nal!", "Elune's light will find you!" } } },
   phrases = {

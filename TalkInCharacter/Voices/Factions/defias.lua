@@ -82,6 +82,8 @@ BT.RegisterVoice({
   },
   openers = { "Psst,", "Keep it quiet, but", "Mark my words,", "Between us and the scarecrows,", "Listen close," },
   closers = { "For the Brotherhood!", "You never saw me.", "Stormwind owes us.", "Mask up.", "VanCleef pays better than the king ever did." },
+  ages = { young = { closers = { "I got my red mask today!", "I'll be a kingpin one day!" } },
+    elder = { closers = { "I laid the stones of Stormwind myself.", "The nobles still owe me my wages." } } },
   moods = { angry = { closers = { "The Brotherhood will not tolerate this!", "I'll gut you like a Westfall boar!",
     "Stormwind cheated us, and now you?", "You'll pay, same as the nobles!" } } },
   phrases = {

@@ -76,6 +76,8 @@ BT.RegisterVoice({
   openers = { "By the Light,", "Hear me!", "In the name of the Crusade,", "The Light has shown me:", "Stand and be judged!" },
   closers = { "The Light demands it.", "Purity above all!", "For the Scarlet Crusade!", "...if you are even truly alive.",
     "I have my eye on you.", "The unclean will burn." },
+  ages = { young = { closers = { "I polished my tabard myself!", "I will purge my first heretic soon!" } },
+    elder = { closers = { "I have kept the flame for forty years.", "I stood watch when the plague first came." } } },
   moods = { angry = { closers = { "Heretic!", "The Light will burn you clean!", "You reek of the plague!",
     "To the interrogation chamber with you!" } } },
   phrases = {

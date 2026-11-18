@@ -68,6 +68,19 @@ function BT.ValidateVoice(voice)
     end
   end
 
+  if voice.ages ~= nil then
+    if type(voice.ages) ~= "table" then return fail("ages must be a table") end
+    for age, extra in pairs(voice.ages) do
+      if type(extra) ~= "table" then return fail("age " .. tostring(age) .. " must be a table") end
+      local problem, plain = Lines(extra.closers, "ages." .. tostring(age) .. ".closers")
+      if problem then return fail(problem) end
+      -- Nothing fills a {token} in an aside.
+      for _, line in ipairs(extra.closers) do
+        if line:find("{", 1, true) then return fail("ages." .. tostring(age) .. ".closers must not use a {token}") end
+      end
+    end
+  end
+
   if type(voice.phrases) ~= "table" then return fail("phrases missing") end
   for _, kind in ipairs(BT.KINDS) do
     local list = voice.phrases[kind]

@@ -75,6 +75,8 @@ BT.RegisterVoice({
   openers = { "Ssso,", "Land-walker,", "By the tides,", "Hear the deep,", "In Azshara's name," },
   closers = { "The tides will it.", "For Queen Azshara!", "The depths remember.", "Ssso it is spoken.",
     "We ruled before your kind could walk." },
+  ages = { young = { closers = { "I only jusst hatched!", "My sscales are sstill ssoft!" } },
+    elder = { closers = { "I ssaw the Well before it ssank.", "Ten thoussand yearss beneath the wavess." } } },
   moods = { angry = { closers = { "The sea will swallow you!", "You will drown for thisss!",
     "Azshara will hear of your insolence!", "Your bones will feed the reef!" } } },
   phrases = {

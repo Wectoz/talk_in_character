@@ -52,7 +52,7 @@ end
 --- The engine options for the current settings.
 function BT.Options()
   local db = BT.db
-  return { race = db.race, class = db.class, mood = db.mood, strength = db.strength, names = BT.ReadableNames() }
+  return { race = db.race, class = db.class, mood = db.mood, age = db.age, strength = db.strength, extras = db.extras, names = BT.ReadableNames() }
 end
 
 --- Whether a message of this chat type would be spoken in the voice right now.
@@ -88,13 +88,40 @@ end
 
 -- Autocorrect Forever builds its dictionary from this list at login, after every addon file has
 -- loaded. A word in it is left as typed, so "strat" is no longer made into "start".
+local taught = false
 if type(AutocorrectForever_Known) == "string" then
   local words = {}
   for term in pairs(BT.Terms.strict) do
     words[#words + 1] = term
-    if term:sub(-1) ~= "s" then words[#words + 1] = term .. "s" end
+    if not term:find("%d") then
+      -- The forms Terms.lua accepts: taunts, taunting, kited, specced.
+      local stem, last = term:gsub("e$", ""), term:sub(-1)
+      for _, ending in ipairs({ "ing", "ed", "er", "ers" }) do
+        words[#words + 1] = stem .. ending
+        if #term <= 4 and not last:find("[aeiouy]") then words[#words + 1] = term .. last .. ending end
+      end
+      if last ~= "s" then words[#words + 1] = term .. "s" end
+    end
   end
   AutocorrectForever_Known = AutocorrectForever_Known .. " " .. table.concat(words, " ")
+  taught = true
+end
+
+--- Whether Autocorrect Forever, when installed, took the game terms. Says so in chat if not:
+--- an update to it can change how it loads words, and that would fail without a sound.
+function BT.CheckAutocorrect()
+  local other = _G.AutocorrectForever
+  if type(other) ~= "table" then return true end
+  local linked = taught
+  if linked and type(other.Test) == "function" then
+    local ok, out = pcall(other.Test, "we strat now")
+    if ok and type(out) == "string" then linked = out:lower():find("strat", 1, true) ~= nil end
+  end
+  if not linked then
+    BT.Print("Autocorrect Forever did not take my list of game terms, so it may change words like \"strat\". "
+      .. "Please tell the Talk in Character author.")
+  end
+  return linked
 end
 
 local busy = false

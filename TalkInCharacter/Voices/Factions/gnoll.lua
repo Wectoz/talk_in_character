@@ -76,6 +76,8 @@ BT.RegisterVoice({
   },
   openers = { "Hyeh heh,", "Yip yip!", "Grrr,", "Rrrowf!", "Hyeh heh heh," },
   closers = { "Hyeh heh heh!", "Yip!", "Grrr.", "...smells like meat.", "Pack is hungry." },
+  ages = { young = { closers = { "Pup bites hard too! Hyeh!", "Pup hunt with pack soon!" } },
+    elder = { closers = { "Old gnoll, grey muzzle, still bites.", "Pack was bigger in old days. Hyeh." } } },
   moods = { angry = { closers = { "Grrrr! Gnoll crack your bones!", "Pack will tear you apart!", "Rrrrargh! More bones to gnaw on!",
     "Gnoll wear your teeth on a string!" } } },
   phrases = {

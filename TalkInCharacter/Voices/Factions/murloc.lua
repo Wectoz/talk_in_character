@@ -73,6 +73,8 @@ BT.RegisterVoice({
   },
   openers = { "Mrglglgl!", "Mrgl mrgl,", "Aaaaughibbrgubugbugrguburgle!", "Mrrrgl,", "Glub glub," },
   closers = { "Mrgl!", "Mrglglgl!", "Glub.", "...ooh, shiny!", "Mrgl mrgl mrgl." },
+  ages = { young = { closers = { "Mrgl! Me just a tadpole!", "Me first fish! Mrgl!" } },
+    elder = { closers = { "Old fins seen many tides, mrrgl.", "Mrgl... tides were bigger once." } } },
   moods = { angry = { closers = { "RWLRWLRWLRWL!", "Mrgl grrr! No touch my shinies!", "You swim with the crabs for this! Mrglgl!",
     "Aaaaughibbrgubugbugrguburgle!" } } },
   phrases = {

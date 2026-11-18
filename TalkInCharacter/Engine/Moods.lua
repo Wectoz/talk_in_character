@@ -13,13 +13,13 @@ local function Plain(run) return not run:find("[\128-\255]") end
 --- Splits off trailing spaces, so punctuation lands on the last word.
 local function Body(text) return text:match("^(.-)(%s*)$") end
 
-local function Angry(text, random, voices)
+local function Angry(text, random, voices, extras)
   text = text:gsub(WORD, function(run)
     if Plain(run) and #run >= 4 and random(100) <= 15 then return run:upper() end
   end)
   local body, tail = Body(text)
   if body:find("%.$") then body = body:sub(1, -2) .. "!" elseif not body:find("[!?]$") then body = body .. "!" end
-  if random(100) <= 30 then
+  if extras ~= false and random(100) <= 30 then
     local closers = {}
     for _, voice in ipairs(voices) do
       local extra = voice.moods and voice.moods.angry and voice.moods.angry.closers
@@ -61,8 +61,8 @@ end
 
 local RULES = { angry = Angry, drunk = Drunk, scared = Scared }
 
-function Moods.Apply(text, mood, random, voices)
+function Moods.Apply(text, mood, random, voices, extras)
   local rule = RULES[mood]
   if not rule then return text end
-  return rule(text, random, voices or {})
+  return rule(text, random, voices or {}, extras)
 end

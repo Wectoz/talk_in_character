@@ -90,3 +90,11 @@ function test_no_voice_swaps_a_strict_game_term()
   each(function(id, v)
     for key in pairs(v.swaps) do assert(not BT.Terms.strict[key], id .. " swaps the game term '" .. key .. "'") end
   end) end
+function test_every_voice_has_its_own_age_lines()
+  each(function(id, v)
+    for _, age in ipairs({ "young", "elder" }) do
+      local lines = v.ages and v.ages[age] and v.ages[age].closers
+      assert(lines and #lines >= 2, id .. " needs 2 " .. age .. " closers")
+      for _, line in ipairs(lines) do assert(#line <= 80, id .. " " .. age .. " line over 80 bytes: " .. line) end
+    end
+  end) end

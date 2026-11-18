@@ -77,6 +77,8 @@ BT.RegisterVoice({
   openers = { "By da loa,", "Hear da word of Zandalar,", "As it was written,", "Da empire speaks,", "Hmph," },
   closers = { "For Zandalar!", "Da loa be watchin'.", "So it is written.", "Da empire endures.",
     "We were kings when ya ancestors lived in mud." },
+  ages = { young = { closers = { "Da loa be watchin' me grow, mon!", "I be findin' me own gold soon!" } },
+    elder = { closers = { "I be older dan ya tribe, mon.", "Zandalar was old when da world was young." } } },
   moods = { angry = { closers = { "Da loa will feast on ya soul!", "Ya dare insult da empire?",
     "Bwonsamdi be waitin' for ya!", "Zandalar does not forget!" } } },
   phrases = {

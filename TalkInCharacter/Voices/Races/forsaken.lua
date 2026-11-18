@@ -79,6 +79,8 @@ BT.RegisterVoice({
   openers = { "Hmph,", "How delightful,", "Oh, joy,", "As the Dark Lady wills,", "If you insist," },
   closers = { "Not that it matters.", "Dark Lady watch over you.", "Trust no one.", "Beware the living.",
     "I have been dead before. It was quieter." },
+  ages = { young = { closers = { "I only died last week!", "Everything still creaks a bit." } },
+    elder = { closers = { "I was old before I died.", "I recall Lordaeron in its glory." } } },
   moods = { angry = { closers = { "I will see you in the plague vats!", "You will make a fine test subject!",
     "Death was kinder than you deserve!", "The apothecaries will hear of this!" } } },
   phrases = {

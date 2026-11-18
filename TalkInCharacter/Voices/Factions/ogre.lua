@@ -76,6 +76,8 @@ BT.RegisterVoice({
   },
   openers = { "Uh,", "Duh,", "Me say,", "Hur hur,", "Other head say," },
   closers = { "Me smash!", "Hur hur hur.", "...me hungry.", "Shut up, other head!", "Is it lunch yet?" },
+  ages = { young = { closers = { "Me still only one head tall!", "Me smash good for little ogre!" } },
+    elder = { closers = { "Me old. Me remember when rocks was new.", "Me too old for this smashing." } } },
   moods = { angry = { closers = { "ME SMASH YOU!", "Me crush you into jelly!", "Both heads agree: you get clubbed!",
     "Now me mad AND hungry!" } } },
   phrases = {

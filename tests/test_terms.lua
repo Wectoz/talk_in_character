@@ -24,3 +24,9 @@ function test_terms_count_as_words()   -- an angry "wts" still gets its "!"
 function test_possessive_and_link()
   local L = "|cff0070dd|Hitem:1:::|h[Tank Ring]|h|r"
   assert(S("tank's " .. L, { mood = "drunk" }) == "tank'sh " .. L) end
+function test_verb_forms_of_a_term_are_kept()
+  for _, word in ipairs({ "taunting", "taunted", "kiting", "specced", "pugging", "ganker", "gankers" }) do
+    assert(S(word .. " is", { mood = "drunk" }) == word .. " ish", word) end end
+function test_everyday_lookalikes_are_not_terms()   -- summ-er, st-ing, def-er
+  assert(S("summer sting", { mood = "drunk" }) == "shummer shting")
+  assert(S("kill deferred", { class = "t_class", strength = 1 }) == "smite deferred") end

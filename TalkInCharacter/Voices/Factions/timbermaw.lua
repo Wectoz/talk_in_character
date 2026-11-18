@@ -81,6 +81,8 @@ BT.RegisterVoice({
   },
   openers = { "Rrrr,", "Hrrm,", "Mmm,", "Grrowf!", "Rrm, listen," },
   closers = { "Rrrr.", "Hrrm.", "Spirits watch you.", "Timbermaw remembers.", "Mmm. Honey." },
+  ages = { young = { closers = { "Cub found honey all by self!", "Cub growing big fur soon, rrr!" } },
+    elder = { closers = { "Old bear seen many winters, rrr.", "Honey was sweeter long ago." } } },
   moods = { angry = { closers = { "GRRRAAH!", "Furbolg not so friendly now!", "You wake the bear!",
     "Timbermaw will sit on you!" } } },
   phrases = {

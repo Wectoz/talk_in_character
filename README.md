@@ -21,6 +21,12 @@ Copy a file under `TalkInCharacter/Voices/`, change the `id`, write the voice, r
 "Match my character" pick it for a playable race, add the race's file token to `RACE_TOKENS`
 in `TalkInCharacter/Core.lua`.
 
+## Ages
+
+`TalkInCharacter/Engine/Ages.lua` holds the Young and Elder rules: a few word swaps, a change
+to punctuation, and asides that follow the catchphrase setting. A voice gives its own asides
+in `ages = { young = { closers = {...} }, elder = { closers = {...} } }`.
+
 ## Game terms
 
 `TalkInCharacter/Engine/Terms.lua` lists the words no voice, accent or mood may change.

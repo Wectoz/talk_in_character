@@ -41,7 +41,8 @@ function Phrases.Pick(kind, opts, target)
     local template = pool[index]
     -- Shielding hides the {tokens}, so the mood cannot slur or stutter a name.
     local shielded, parts = BT.Protect.Shield(template)
-    shielded = BT.Moods.Apply(shielded, opts.mood or "calm", random, voices)
+    if BT.Ages then shielded = BT.Ages.Apply(shielded, opts.age, random, opts.extras, 3, voices) end
+    shielded = BT.Moods.Apply(shielded, opts.mood or "calm", random, voices, opts.extras)
     local line = BT.Protect.Restore(shielded, parts):gsub("{(.-)}", function(token) return target[TOKENS[token]] end)
     if #line <= 255 then
       last[kind] = template

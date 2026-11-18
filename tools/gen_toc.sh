@@ -5,7 +5,7 @@ toc=TalkInCharacter/TalkInCharacter.toc
 {
   sed -n '/^##/p' "$toc"
   echo
-  for f in Core.lua Engine/Protect.lua Engine/Terms.lua Engine/Voices.lua Engine/Engine.lua Engine/Moods.lua Engine/Phrases.lua; do echo "$f"; done
+  for f in Core.lua Engine/Protect.lua Engine/Terms.lua Engine/Voices.lua Engine/Engine.lua Engine/Ages.lua Engine/Moods.lua Engine/Phrases.lua; do echo "$f"; done
   echo
   (cd TalkInCharacter && find Voices -name '*.lua' | sort)
   echo

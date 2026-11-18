@@ -43,6 +43,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Hah!", "Listen up,", "By my blade,", "Right,", "Enough talk," },
   closers = { "Now, who needs hitting?", "Steel solves most things.", "I charge first.", "Hah!", "Less talking, more swinging." },
+  ages = { young = { closers = { "Can I carry the big sword?", "I didn't even flinch!" } },
+    elder = { closers = { "My shield arm isn't what it was.", "I have forgotten more battles than you have fought." } } },
   moods = { angry = { closers = { "My rage bar is FULL!", "Say that again to my axe!", "I will charge you from here!", "RAAAGH!" } } },
   phrases = {
     hello = { "Hail, {target}! Got anything that needs hitting?", "Well met! Good day for a fight.", "Hah! A {targetClass}. Stay behind my shield.",

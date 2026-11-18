@@ -75,6 +75,8 @@ BT.RegisterVoice({
   },
   openers = { "Eep!", "Psst,", "Oh no oh no,", "Kobold say,", "Ooh, candle!" },
   closers = { "You no take candle!", "No hit kobold!", "...is that candle?", "Dig dig dig.", "Kobold only little." },
+  ages = { young = { closers = { "Me got first candle today!", "Me dig big hole one day!" } },
+    elder = { closers = { "Old kobold kept same candle forty years.", "Tunnels was deeper back then." } } },
   moods = { angry = { closers = { "YOU NO TAKE CANDLE!", "Kobold bite ankle now!", "Kobold tell big boss on you!",
     "Give back candle or kobold get shovel!" } } },
   phrases = {

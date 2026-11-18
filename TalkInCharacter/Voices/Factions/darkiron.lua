@@ -80,6 +80,8 @@ BT.RegisterVoice({
   },
   openers = { "Bah,", "By the Firelord,", "Hrmph,", "Soot and cinders,", "By the black anvil," },
   closers = { "For Ragnaros!", "The forge never cools.", "Mark my words.", "Blackrock endures.", "Now back to the anvil." },
+  ages = { young = { closers = { "I lit me first forge today!", "I'll serve the Emperor one day!" } },
+    elder = { closers = { "I've breathed soot longer than ye've breathed air.", "The forges burned hotter in my day." } } },
   moods = { angry = { closers = { "I'll hammer ye flat!", "Into the lava with ye!", "Ye'll be slag by sundown!",
     "By the Firelord, I'll have yer beard for kindling!" } } },
   phrases = {

@@ -79,6 +79,8 @@ BT.RegisterVoice({
   openers = { "Listen, pal,", "Have I got a deal for you!", "Between you and me,", "Step right up!", "Psst,", "Okay, okay," },
   closers = { "Time is money, friend!", "No refunds.", "Tell your friends!", "Batteries not included.", "Cash up front.",
     "I got what you need." },
+  ages = { young = { closers = { "I'm gonna be so rich!", "My first sale! No refunds!" } },
+    elder = { closers = { "I made my first fortune before you could count.", "In my day, a copper bought something." } } },
   moods = { angry = { closers = { "You're costing me money!", "I'm adding this to your bill!", "That's coming out of your deposit!",
     "Somebody is getting blown up for this!" } } },
   phrases = {

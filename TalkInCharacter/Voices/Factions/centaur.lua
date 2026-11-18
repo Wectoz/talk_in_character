@@ -76,6 +76,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Hear me,", "By the khan,", "The clan has spoken,", "Stamp your hooves!", "Listen, two-legs," },
   closers = { "So says the khan.", "The clan rides!", "Hooves decide it.", "Kneel or be trampled.", "This land is ours." },
+  ages = { young = { closers = { "My hooves are fast for a foal!", "I will ride with the khan one day!" } },
+    elder = { closers = { "My hooves have crossed every plain twice.", "I rode with the first khans." } } },
   moods = { angry = { closers = { "I will grind you into the dust!", "Your bones will mark our border!",
     "The clan will ride over your grave!", "You have insulted the khan!" } } },
   phrases = {

@@ -51,6 +51,8 @@ BT.RegisterVoice({
   openers = { "Be at peace,", "The wilds whisper,", "By the Dream,", "In nature's name,", "Hush,", "Balance in all things," },
   closers = { "Nature will have its balance.", "The Dream shows me so.", "Tread softly.", "All things grow in time.",
     "I say this as a bear and as a friend." },
+  ages = { young = { closers = { "I turned into a cat! Almost.", "The trees like me!" } },
+    elder = { closers = { "I slept through whole ages in the Dream.", "I planted that oak as a sapling." } } },
   moods = { angry = { closers = { "Nature has claws, and so do I!", "You have woken the bear!",
     "The wild is serene. I am not!", "I will plant a tree where you stood!" } } },
   phrases = {

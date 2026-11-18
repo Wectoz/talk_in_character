@@ -44,6 +44,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "As any apprentice knows,", "Elementary.", "By the Kirin Tor,", "Observe:" },
   closers = { "It is elementary, really.", "I read it in a tome once.", "Mind the robes.", "The arcane provides." },
+  ages = { young = { closers = { "I only set one thing on fire!", "Watch, I can almost blink!" } },
+    elder = { closers = { "I conjured bread before it was fashionable.", "My beard holds more mana than you." } } },
   moods = { angry = { closers = { "I will turn you into a sheep!", "Do not test my patience, or my fireballs!", "Insolence!" } } },
   phrases = {
     hello = { "Well met. Mind the robes.", "Greetings, {target}. Do you require water?", "Ah, a visitor. I was only reading.",

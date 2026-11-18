@@ -47,6 +47,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "Psst,", "Between you and me,", "Keep your voice down,", "A little bird told me", "Listen close," },
   closers = { "You did not hear it from me.", "For a price, of course.", "I was never here.", "Check your pockets.", "Let us call it a deal." },
+  ages = { young = { closers = { "Nobody even saw me!", "I picked my first lock today!" } },
+    elder = { closers = { "These fingers were quicker once.", "Old rogues are rare for a reason." } } },
   moods = { angry = { closers = { "Watch your back.", "You will not see it coming.", "I know a poison for people like you.", "Sleep lightly tonight." } } },
   phrases = {
     hello = { "Psst. {target}. Over here.", "Well, well. Look who it is.", "Hello. Nice coin purse you have there.",

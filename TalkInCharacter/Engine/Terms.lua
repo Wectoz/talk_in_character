@@ -28,7 +28,33 @@ local STRICT = Set([[
   rfc wc sfk bfd rfk rfd uld ulda mc ony bwl zg aq aq20 aq40 naxx wsg ab av
   afking ninjaed ninjaing procced proccing critted hitcap ganker ganking zerging zerged
   vendoring vendored aggroed aggroing manaless nerf nerfed nerfing leet zugzug ench healthstone
-  pally pala lock sham shammy hpal rsham spriest resto ret enh ele feral boomkin moonkin disc
+  lfw lfp lfr summ summs hs hearth hearthed hearthing guildie gm gquit gkick ginvite gbank gchat
+  rl raidlead bio bbl bbs ooc wp ding dinged dinging kek zug lok
+  newb newbie nub lowbie pwn pwned pwnage altoholic bankalt tanky healbot dpser offtanking
+  specced speccing respecced respeccing 1h mh melee meleeing
+  aoeing aoed cleaving dotted dotting rebuff debuffed kiter kited cced ccing decurse decursing
+  dispelled dispelling stunlock stunlocked sheeped sheeping poly polyed rezzed rezzing
+  epgp deing attune attuned attunement unattuned critting spellpower spelldmg spellhit mp5 fsr
+  agi stam sta spi defcap wcl warcraftlogs pvping pver hk dk dhk hwl ahing ahed prepot potting
+  gph goldfarm goldfarming spawn respawn respawning
+  stockades gnomeregan maraudon uldaman onyxia naxxramas
+  ragnaros nef nefarian vael vaelastrasz razorgore chromag chromaggus firemaw ebonroc flamegor
+  broodlord lucifron magmadar gehennas garr geddon shazzrah sulfuron golemagg majordomo domo
+  hakkar jindo mandokir thekal arlokk venoxis jeklik marli cthun ouro huhuran fankriss skeram
+  sartura viscidus kt kelthuzad sapphiron sapph patchwerk grobbulus gluth thaddius anub faerlina
+  maexxna noth heigan loatheb razuvious gothik kazzak azuregos emeriss lethon taerar ysondre
+  sw stormwind ironforge darnassus org orgrimmar tb uc undercity stv epl wpl ungoro xroads
+  tm lhc gadgetzan
+  pallies shammies hpally boomie warr huntard surv assa mut affli destro bm mm sv
+  bt ww sb fb pom pyro kb evis snd loh boh bok bom soc sor motw gotw ff pws swp gheal fheal
+  fearward wf lhw vw coe fd tranq
+  tf thunderfury sulfuras dft hoj sgc tuf wbuff wb worldbuff dmf sayge chronoboon booned
+  hc ssf deathlog fp flightpath zep profs herbing chanter lw alch engi fa xmute
+  arcanite thorium mithril felcloth mooncloth runecloth devilsaur dreamfoil gromsblood plaguebloom
+  macro addon dbm bigwigs weakaura questie elvui
+  skyborne realmless ruleset campsite transmog tmog xmog rp rper rping rppvp erp
+  lvl lvling lvled xp repgrind grp
+  pally pala shammy hpal rsham spriest resto ret enh ele feral boomkin moonkin disc
 ]])
 
 local LOOSE = Set([[
@@ -45,6 +71,10 @@ local LOOSE = Set([[
   potion weapon sword armor dagger knife staff gun food water drink
   sell buy trade price free cheap expensive target attack fire ice curse spell
   buff rez res hot sheep left right
+  war lock sham port summon rank honor rep gear flask elixir epic layer phase elite rare
+  raid raider solo duo legacy perk hardcore totem seal aura aspect trap stun fear sap bubble
+  blink nova rag demo sub caster ranged hybrid camp dodge block resist frost shadow arcane
+  nature affliction execute sunder renew shackle
 ]])
 
 -- Abbreviations that are an everyday word in any other letter case.
@@ -52,9 +82,29 @@ local EXACT = { HoT = true, HoTs = true }
 
 Terms.strict = STRICT
 
---- Whether `lower`, or its singular, is in `set`.
+-- Everyday words that only look like a term with an ending: summ-er, def-er, cod-ed.
+local NOT_A_FORM = Set([[
+  summer summers summed summing defer coded coder coders coding muted muter mutter mutters
+  simmer simmers doted doting nothing losing loser losers spied soccer sored alter alters
+  otter otters udder warred warring tanker tankers
+]])
+local ENDINGS = { "ing", "ed", "er", "ers" }
+
+--- Whether `lower` is in `set`, or is a plural or verb form of a word in it: tanks, taunting,
+--- kited (kite), specced (spec).
 local function Has(set, lower)
-  return set[lower] or (#lower > 2 and lower:sub(-1) == "s" and set[lower:sub(1, -2)]) or false
+  if set[lower] then return true end
+  if #lower > 2 and lower:sub(-1) == "s" and set[lower:sub(1, -2)] then return true end
+  if NOT_A_FORM[lower] then return false end
+  for _, ending in ipairs(ENDINGS) do
+    local stem = lower:sub(1, -#ending - 1)
+    -- Three letters at least: "st" must not claim "sting".
+    if #stem >= 3 and lower:sub(-#ending) == ending then
+      if set[stem] or set[stem .. "e"] then return true end
+      if stem:sub(-1) == stem:sub(-2, -2) and set[stem:sub(1, -2)] then return true end
+    end
+  end
+  return false
 end
 
 -- A run keeps its bytes above 127, so part of a foreign word is never taken for a term.

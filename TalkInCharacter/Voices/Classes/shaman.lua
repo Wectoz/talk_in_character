@@ -48,6 +48,8 @@ BT.RegisterVoice({
   openers = { "The spirits say,", "By earth and storm,", "Hear me,", "The ancestors whisper,", "Storm, earth and fire," },
   closers = { "The elements will it.", "So the spirits tell me.", "The ancestors are watching.",
     "Stay near my totems.", "Storm, earth and fire, heed my call." },
+  ages = { young = { closers = { "The wind talked to me!", "My totem stayed up this time!" } },
+    elder = { closers = { "The elements and I are old friends.", "I heard the ancestors long before you." } } },
   moods = { angry = { closers = { "The storm rises in me!", "You will answer to the elements!",
     "Stand on my totem again and see what happens!", "Even the earth is losing patience with you!" } } },
   phrases = {

@@ -76,6 +76,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "By the Light,", "Truth be told,", "Upon my honour,", "I tell you plainly,", "King's honour," },
   closers = { "For the Alliance!", "Light willing.", "On my honour.", "For king and country.", "The harvest will not wait." },
+  ages = { young = { closers = { "I'm going to be a knight one day!", "Wait till Stormwind hears of this!" } },
+    elder = { closers = { "I marched in the First War, you know.", "Stormwind was smaller in my day." } } },
   moods = { angry = { closers = { "The guard will hear of this!", "Have you no honour?", "Light give me patience!",
     "You shame the king's colours!" } } },
   phrases = {

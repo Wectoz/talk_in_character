@@ -33,7 +33,14 @@ function test_names_survive()       assert(S("hello My", { race = "t_race", stre
 function test_opener_heavy()        -- rolls: chance 1 (<=35), opener (1), which (1)
   assert(S("hello there friend", { race = "t_race", strength = 3, random = Harness.seq(1, 1, 1) }) == "Arr, ahoy there friend") end
 function test_closer_heavy()
-  assert(S("hello there friend", { race = "t_race", strength = 3, random = Harness.seq(1, 2, 1) }) == "ahoy there friend Yarr!") end
+  assert(S("hello there friend", { race = "t_race", strength = 3, random = Harness.seq(1, 2, 1) }) == "ahoy there friend. Yarr!") end
+function test_closer_after_existing_punctuation()
+  local o = function() return { race = "t_race", strength = 3, random = Harness.seq(1, 2, 1) } end
+  assert(S("hello there friend!", o()) == "ahoy there friend! Yarr!")
+  assert(S("hello there friend :)", o()) == "ahoy there friend :) Yarr!")
+  assert(S("hello there friend  ", o()) == "ahoy there friend. Yarr!") end
+function test_extras_off_adds_nothing()
+  assert(S("hello there friend", { race = "t_race", strength = 3, extras = false, random = Harness.seq(1, 1, 1) }) == "ahoy there friend") end
 function test_chance_gate_medium()  -- 10% at medium: a roll of 11 adds nothing, 10 does
   assert(S("hello there friend", { race = "t_race", strength = 2, random = Harness.seq(11) }) == "ahoy there friend")
   assert(S("hello there friend", { race = "t_race", strength = 2, random = Harness.seq(10, 1, 1) }) == "Arr, ahoy there friend") end

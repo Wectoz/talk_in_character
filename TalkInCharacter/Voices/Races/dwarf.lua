@@ -92,6 +92,8 @@ BT.RegisterVoice({
   openers = { "Och,", "By me beard,", "Aye,", "Listen here,", "By Magni's hammer," },
   closers = { "For Khaz Modan!", "Interest ya'n the pint?", "...or I'll eat me own beard.", "Now, where's me ale?",
     "Solid as the mountain." },
+  ages = { young = { closers = { "Can I hold the hammer?", "Me beard's comin' in, look!" } },
+    elder = { closers = { "Ale was stronger in my day.", "I've boots older than ye." } } },
   moods = { angry = { closers = { "I'll have yer kneecaps fer this!", "Ye beardless oaf!", "Me hammer wants a word wi' ye!",
     "That's a grudge, that is!" } } },
   phrases = {

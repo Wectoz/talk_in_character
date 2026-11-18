@@ -22,6 +22,7 @@ local CHAT_LABELS = {
 }
 local MOODS = { { "calm", "Calm" }, { "angry", "Angry" }, { "drunk", "Drunk" }, { "scared", "Scared" } }
 local WHEEL_CHATS = { { "SAY", "Say" }, { "YELL", "Yell" }, { "EMOTE", "Emote" }, { "PARTY", "Party" }, { "RAID", "Raid" }, { "GUILD", "Guild" } }
+local AGES = { { "adult", "Adult" }, { "young", "Young" }, { "elder", "Elder" } }
 local STRENGTHS = { "Light", "Medium", "Heavy" }
 local MODIFIERS = { LSHIFT = true, RSHIFT = true, LCTRL = true, RCTRL = true, LALT = true, RALT = true, LMETA = true, RMETA = true, UNKNOWN = true }
 
@@ -303,16 +304,21 @@ local function BuildVoice(y)
   end)
   panel.match:SetPoint("TOPLEFT", 20, y - 70)
 
-  Label(panel, "Strength", COLOR.muted):SetPoint("TOPLEFT", 190, y - 75)
+  -- Second row: match button, age, strength. Nothing here passes x = 595, where the wheel row ends.
+  Label(panel, "Age", COLOR.muted):SetPoint("TOPLEFT", 176, y - 75)
+  Dropdown(panel, 100, 204, y - 69, PlainItems(AGES), function() return db.age end, function(v) db.age = v end)
+  Label(panel, "Strength", COLOR.muted):SetPoint("TOPLEFT", 322, y - 75)
   local slider = CreateFrame("Slider", nil, panel, "BackdropTemplate")
   slider:SetOrientation("HORIZONTAL")
   slider:SetSize(150, 6)
-  slider:SetPoint("TOPLEFT", 250, y - 79)
+  slider:SetPoint("TOPLEFT", 380, y - 79)
   Surface(slider, COLOR.surface, COLOR.border)
   slider:SetMinMaxValues(1, 3)
   slider:SetValueStep(1)
-  slider:SetObeyStepOnDrag(true)
-  slider:SetHitRectInsets(0, 0, -8, -8) -- the bar is thin; this makes it easy to grab
+  -- The thumb follows the mouse freely and settles on the nearest step when let go: snapping
+  -- between three stops while dragging feels stiff.
+  slider:SetObeyStepOnDrag(false)
+  slider:SetHitRectInsets(-6, -6, -10, -10) -- the bar is thin; this makes it easy to grab
   local thumb = slider:CreateTexture(nil, "OVERLAY")
   thumb:SetTexture(WHITE)
   thumb:SetSize(9, 16)
@@ -321,14 +327,29 @@ local function BuildVoice(y)
   slider.value = Label(panel, "", COLOR.gold)
   slider.value:SetPoint("LEFT", slider, "RIGHT", 10, 0)
   function slider:Refresh()
-    self.refreshing = true
-    self:SetValue(db.strength)
-    self.refreshing = false
+    if not self.dragging then
+      self.refreshing = true
+      self:SetValue(db.strength)
+      self.refreshing = false
+    end
     self.value:SetText(STRENGTHS[db.strength] or "")
   end
   slider:SetScript("OnValueChanged", function(self, value)
     if self.refreshing then return end
     local step = math.floor(value + 0.5)
+    if step ~= db.strength then
+      db.strength = step
+      BT.RefreshOptions()
+    end
+  end)
+  slider:SetScript("OnMouseDown", function(self) self.dragging = true end)
+  slider:SetScript("OnMouseUp", function(self)
+    self.dragging = false
+    self:Refresh()
+  end)
+  slider:EnableMouseWheel(true)
+  slider:SetScript("OnMouseWheel", function(self, delta)
+    local step = math.max(1, math.min(3, db.strength + (delta > 0 and 1 or -1)))
     if step ~= db.strength then
       db.strength = step
       BT.RefreshOptions()
@@ -372,6 +393,7 @@ local function BuildAuto(y)
   note:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
   note:SetJustifyH("LEFT")
   Check(panel, "Show a preview above the chat box", 20, y - 96, function() return db.preview end, function(v) db.preview = v end)
+  Check(panel, "Add catchphrases before or after my message", 300, y - 96, function() return db.extras end, function(v) db.extras = v end)
   return y - 130
 end
 

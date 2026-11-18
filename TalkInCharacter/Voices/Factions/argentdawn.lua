@@ -73,6 +73,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "By the Light,", "Hear me,", "Steady now,", "In the name of the Dawn,", "Stand fast," },
   closers = { "Light be with you.", "The Dawn endures.", "Stay vigilant.", "Hope is not lost.", "For the Argent Dawn!" },
+  ages = { young = { closers = { "I just took my oath!", "My first watch is tonight!" } },
+    elder = { closers = { "I have stood this vigil since the plague began.", "Old soldiers hold the line best." } } },
   moods = { angry = { closers = { "The Light will judge you!", "You shame the Dawn!", "Back to the grave with you!",
     "I have buried better than you!" } } },
   phrases = {

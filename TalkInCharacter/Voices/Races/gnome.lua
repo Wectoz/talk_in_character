@@ -73,6 +73,8 @@ BT.RegisterVoice({
   sounds = {},
   openers = { "By my calculations,", "Fascinating!", "According to my schematics,", "Technically speaking,", "Ooh!" },
   closers = { "Fascinating!", "For Gnomeregan!", "I have a device for that.", "Trust me, I ran the numbers.", "Science!" },
+  ages = { young = { closers = { "Can I press the red button?", "I built it myself!" } },
+    elder = { closers = { "I remember Gnomeregan before the trouble.", "My first invention still works. Mostly." } } },
   moods = { angry = { closers = { "This is highly irregular!", "My calculations did NOT account for this!", "Someone fetch my wrench!" } } },
   phrases = {
     hello = { "Greetings, {target}!", "Salutations!", "Hello, hello! Mind the gears.",
