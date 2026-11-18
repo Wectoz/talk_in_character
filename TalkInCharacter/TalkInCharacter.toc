@@ -2,7 +2,7 @@
 ## Title: Talk in Character
 ## Notes: Speak like your race, faction and class. /tic for options.
 ## Author: Wectoz
-## Version: 1.0.0
+## Version: 1.1.0
 ## OptionalDeps: AutocorrectForever
 ## SavedVariablesPerCharacter: TalkInCharacterCharDB
 ## IconTexture: Interface\AddOns\TalkInCharacter\Media\icon
