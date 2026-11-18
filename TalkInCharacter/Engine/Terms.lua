@@ -23,7 +23,7 @@ local STRICT = Set([[
   wipe wiped prog brez enrage
   ap sp crit uncrittable snapshotting sim simming
   pvp pve bg wpvp gank ganked zerg inc def fc efc dr juke
-  ah wtb wts wtt cod mats reagent undercut buyout
+  wtb wts wtt cod mats reagent undercut buyout
   dm vc gnomer sm gy lib cath zf mara brd lbrs ubrs dme dmw dmn dmt strat ud scholo
   rfc wc sfk bfd rfk rfd uld ulda mc ony bwl zg aq aq20 aq40 naxx wsg ab av
   afking ninjaed ninjaing procced proccing critted hitcap ganker ganking zerging zerged
@@ -70,7 +70,7 @@ local LOOSE = Set([[
   kill heal boss bosses loot gold mount pet group party guild quest dungeon leader
   potion weapon sword armor dagger knife staff gun food water drink
   sell buy trade price free cheap expensive target attack fire ice curse spell
-  buff rez res hot sheep left right
+  buff rez res hot ah sheep left right
   war lock sham port summon rank honor rep gear flask elixir epic layer phase elite rare
   raid raider solo duo legacy perk hardcore totem seal aura aspect trap stun fear sap bubble
   blink nova rag demo sub caster ranged hybrid camp dodge block resist frost shadow arcane
@@ -78,7 +78,7 @@ local LOOSE = Set([[
 ]])
 
 -- Abbreviations that are an everyday word in any other letter case.
-local EXACT = { HoT = true, HoTs = true }
+local EXACT = { HoT = true, HoTs = true, AH = true }
 
 Terms.strict = STRICT
 

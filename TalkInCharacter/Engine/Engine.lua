@@ -86,7 +86,8 @@ local function Attempt(text, race, class, opts, strength, random, mood, age)
     if run:lower() ~= "xd" then words = words + 1 end
   end
   -- After the count, so a message of nothing but game terms still counts as words.
-  -- A message with jargon in it is business: it takes the voice, but no age and no mood.
+  -- A message with jargon in it is business: it takes the voice's words, but no catchphrase,
+  -- no age and no mood.
   local jargon
   shielded, jargon = BT.Terms.Shield(shielded, parts, opts.keep, opts.game)
   -- A run that touches a byte above 127 is someone's own language: left alone.
@@ -98,7 +99,7 @@ local function Attempt(text, race, class, opts, strength, random, mood, age)
   if race then voices[#voices + 1] = race end
   if class then voices[#voices + 1] = class end
   if BT.Ages and words >= 1 and not jargon then shielded = BT.Ages.Apply(shielded, age, random, opts.extras, words, voices) end
-  if words >= 3 and opts.extras ~= false then
+  if words >= 3 and opts.extras ~= false and not jargon then
     shielded = Interject(shielded, race, strength, random)
     shielded = Interject(shielded, class, strength, random)
   end

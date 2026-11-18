@@ -267,3 +267,11 @@ function test_group_chat_keeps_game_words_when_ticked()
   BT.db.plainGroups = false
   BT.voices.t_race.swaps.boss = nil
   assert(voiced == "ahoy big beastie" and plain == "ahoy boss" and say == "ahoy big beastie") end
+function test_keep_takes_one_word_only()
+  assert(BT.Keep("two words", true) == nil and BT.Keep("", true) == nil and next(BT.db.keep) == nil)
+  assert(BT.Keep("  Moss ", true) == "moss" and BT.KeptWords()[1] == "moss")
+  BT.Keep("moss", false) assert(#BT.KeptWords() == 0) end
+function test_panel_refreshes_with_kept_words()
+  BT.BuildOptions() BT.Keep("moss", true) BT.Keep("fern", true)
+  BT.RefreshOptions()
+  BT.Keep("moss", false) BT.Keep("fern", false) BT.RefreshOptions() end

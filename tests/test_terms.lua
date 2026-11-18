@@ -37,3 +37,8 @@ function test_verb_forms_of_a_term_are_kept()
 function test_everyday_lookalikes_are_not_terms()   -- summ-er, st-ing, def-er
   assert(S("summer sting", { mood = "drunk" }) == "shummer shting")
   assert(S("kill deferred", { class = "t_class", strength = 1 }) == "smite deferred") end
+function test_ah_is_an_everyday_word_unless_shouted()
+  assert(S("ah yes is", { mood = "drunk" }) == "ah yesh ish")
+  assert(S("AH is", { mood = "drunk" }) == "AH is") end
+function test_jargon_message_takes_no_catchphrase()
+  assert(S("hello lfm brd", { race = "t_race", strength = 3, random = Harness.seq(1, 1, 1) }) == "ahoy lfm brd") end

@@ -111,6 +111,19 @@ end
 
 local refreshers = {} -- every control's refresh, run when the panel shows
 
+--- A line of help beside `frame` while the mouse is on it.
+local function Tip(frame, text)
+  frame:HookScript("OnEnter", function(self)
+    if not GameTooltip then return end
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText(text, COLOR.text[1], COLOR.text[2], COLOR.text[3], 1, true)
+    GameTooltip:Show()
+  end)
+  frame:HookScript("OnLeave", function() if GameTooltip then GameTooltip:Hide() end end)
+end
+
+local function Gold(self) self:SetBackdropBorderColor(COLOR.gold[1], COLOR.gold[2], COLOR.gold[3], 1) end
+
 local function Check(parent, text, x, y, get, set)
   local check = CreateFrame("Button", nil, parent, "BackdropTemplate")
   check:SetSize(16, 16)
@@ -130,6 +143,8 @@ local function Check(parent, text, x, y, get, set)
     set(not get())
     BT.RefreshOptions()
   end)
+  check:SetScript("OnEnter", Gold)
+  check:SetScript("OnLeave", function(self) self:SetBackdropBorderColor(COLOR.bronze[1], COLOR.bronze[2], COLOR.bronze[3], 1) end)
   --- Greys the box out and stops clicks.
   function check:SetLocked(locked)
     self.locked = locked
@@ -149,6 +164,23 @@ local function TextButton(parent, text, width, onClick)
   button:SetScript("OnEnter", function(self) self:SetBackdropBorderColor(COLOR.gold[1], COLOR.gold[2], COLOR.gold[3], 1) end)
   button:SetScript("OnLeave", function(self) self:SetBackdropBorderColor(COLOR.bronze[1], COLOR.bronze[2], COLOR.bronze[3], 1) end)
   return button
+end
+
+--- A one-line text box. Enter runs `onEnter` if given; Esc gives the keyboard back.
+local function Input(parent, onEnter)
+  local input = CreateFrame("EditBox", nil, parent, "BackdropTemplate")
+  Surface(input, COLOR.surface, COLOR.border)
+  input:SetFontObject("GameFontHighlightSmall")
+  input:SetTextColor(COLOR.text[1], COLOR.text[2], COLOR.text[3])
+  input:SetTextInsets(5, 5, 0, 0)
+  input:SetAutoFocus(false)
+  input:SetMaxLetters(200)
+  input:SetHeight(20)
+  input:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+  input:SetScript("OnEnterPressed", function(self) if onEnter then onEnter() else self:ClearFocus() end end)
+  input:SetScript("OnEditFocusGained", Gold)
+  input:SetScript("OnEditFocusLost", function(self) self:SetBackdropBorderColor(COLOR.border[1], COLOR.border[2], COLOR.border[3], 1) end)
+  return input
 end
 
 -- One shared list for every dropdown, with a full-screen catcher behind it so a click
@@ -282,6 +314,8 @@ end
 -- The panel
 
 local panel, category
+local content        -- everything below the title: it scrolls when the game's panel is too short
+local SetContentHeight
 
 function BT.RefreshOptions()
   if not panel then return end
@@ -290,28 +324,29 @@ end
 
 local function BuildVoice(y)
   local db = BT.db
-  Header(panel, "Voice", y)
-  Check(panel, "Enabled", 20, y - 24, function() return db.enabled end, function(v) db.enabled = v end)
-  Label(panel, "Race / faction", COLOR.muted):SetPoint("TOPLEFT", 120, y - 20)
-  Dropdown(panel, 190, 120, y - 34, VoiceItems("race", "faction"), function() return db.race end, function(v) db.race = v end)
-  Label(panel, "Class", COLOR.muted):SetPoint("TOPLEFT", 320, y - 20)
-  Dropdown(panel, 130, 320, y - 34, VoiceItems("class"), function() return db.class end, function(v) db.class = v end)
-  Label(panel, "Mood", COLOR.muted):SetPoint("TOPLEFT", 460, y - 20)
-  Dropdown(panel, 100, 460, y - 34, PlainItems(MOODS), function() return db.mood end, function(v) db.mood = v end)
-  panel.match = TextButton(panel, "Match my character", 140, function()
+  Header(content, "Voice", y)
+  Check(content, "Enabled", 20, y - 38, function() return db.enabled end, function(v) db.enabled = v end)
+  Label(content, "Race / faction", COLOR.muted):SetPoint("TOPLEFT", 120, y - 20)
+  Dropdown(content, 190, 120, y - 34, VoiceItems("race", "faction"), function() return db.race end, function(v) db.race = v end)
+  Label(content, "Class", COLOR.muted):SetPoint("TOPLEFT", 320, y - 20)
+  Dropdown(content, 130, 320, y - 34, VoiceItems("class"), function() return db.class end, function(v) db.class = v end)
+  Label(content, "Mood", COLOR.muted):SetPoint("TOPLEFT", 460, y - 20)
+  Dropdown(content, 100, 460, y - 34, PlainItems(MOODS), function() return db.mood end, function(v) db.mood = v end)
+
+  -- Second row, on the same columns as the first: match button, age, strength.
+  local match = TextButton(content, "Match my character", 140, function()
     BT.MatchCharacter()
     BT.RefreshOptions()
   end)
-  panel.match:SetPoint("TOPLEFT", 20, y - 70)
-
-  -- Second row: match button, age, strength. Nothing here passes x = 595, where the wheel row ends.
-  Label(panel, "Age", COLOR.muted):SetPoint("TOPLEFT", 176, y - 75)
-  Dropdown(panel, 100, 204, y - 69, PlainItems(AGES), function() return db.age end, function(v) db.age = v end)
-  Label(panel, "Strength", COLOR.muted):SetPoint("TOPLEFT", 322, y - 75)
-  local slider = CreateFrame("Slider", nil, panel, "BackdropTemplate")
+  match:SetPoint("TOPLEFT", 120, y - 81)
+  Tip(match, "Sets the race and class voice from the character you are playing.")
+  Label(content, "Age", COLOR.muted):SetPoint("TOPLEFT", 320, y - 66)
+  Dropdown(content, 130, 320, y - 80, PlainItems(AGES), function() return db.age end, function(v) db.age = v end)
+  Label(content, "Strength", COLOR.muted):SetPoint("TOPLEFT", 460, y - 66)
+  local slider = CreateFrame("Slider", nil, content, "BackdropTemplate")
   slider:SetOrientation("HORIZONTAL")
-  slider:SetSize(150, 6)
-  slider:SetPoint("TOPLEFT", 380, y - 79)
+  slider:SetSize(100, 6)
+  slider:SetPoint("TOPLEFT", 460, y - 89)
   Surface(slider, COLOR.surface, COLOR.border)
   slider:SetMinMaxValues(1, 3)
   slider:SetValueStep(1)
@@ -324,8 +359,8 @@ local function BuildVoice(y)
   thumb:SetSize(9, 16)
   thumb:SetVertexColor(COLOR.gold[1], COLOR.gold[2], COLOR.gold[3])
   slider:SetThumbTexture(thumb)
-  slider.value = Label(panel, "", COLOR.gold)
-  slider.value:SetPoint("LEFT", slider, "RIGHT", 10, 0)
+  slider.value = Label(content, "", COLOR.gold)
+  slider.value:SetPoint("TOPRIGHT", content, "TOPLEFT", 560, y - 66)
   function slider:Refresh()
     if not self.dragging then
       self.refreshing = true
@@ -357,73 +392,77 @@ local function BuildVoice(y)
   end)
   refreshers[#refreshers + 1] = slider
 
-  local sample = CreateFrame("Frame", nil, panel, "BackdropTemplate")
-  sample:SetPoint("TOPLEFT", 20, y - 100)
-  sample:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
-  sample:SetHeight(46)
+  local extras = Check(content, "Add catchphrases before or after my message", 120, y - 116,
+    function() return db.extras end, function(v) db.extras = v end)
+  Tip(extras, "Now and then a message gets an opener (\"Och,\") or a closer (\"For Khaz Modan!\"), and an aside for your age.")
+
+  local sample = CreateFrame("Frame", nil, content, "BackdropTemplate")
+  sample:SetPoint("TOPLEFT", 20, y - 142)
+  sample:SetPoint("RIGHT", content, "RIGHT", -20, 0)
+  sample:SetHeight(66)
   Surface(sample, COLOR.reading, COLOR.bronze)
-  sample.typed = Label(sample, "You type:", COLOR.muted)
-  sample.typed:SetPoint("TOPLEFT", 8, -8)
+  sample.typed = Label(sample, "You type", COLOR.muted)
+  sample.typed:SetPoint("TOPLEFT", 10, -11)
   -- The sample can be typed over, to try any sentence without sending it.
-  local input = CreateFrame("EditBox", nil, sample, "BackdropTemplate")
-  Surface(input, COLOR.surface, COLOR.border)
-  input:SetFontObject("GameFontHighlightSmall")
-  input:SetTextColor(COLOR.text[1], COLOR.text[2], COLOR.text[3])
-  input:SetTextInsets(4, 4, 0, 0)
-  input:SetAutoFocus(false)
-  input:SetMaxLetters(200)
-  input:SetHeight(18)
-  input:SetPoint("LEFT", sample.typed, "RIGHT", 6, 0)
-  input:SetPoint("RIGHT", sample, "RIGHT", -70, 0)
+  local input = Input(sample)
+  input:SetPoint("TOPLEFT", 82, -7)
+  input:SetPoint("RIGHT", sample, "RIGHT", -72, 0)
   input:SetText(SAMPLE)
   input:SetCursorPosition(0)
-  input:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
-  input:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+  Label(sample, "Others see", COLOR.muted):SetPoint("TOPLEFT", 10, -37)
   sample.seen = Label(sample, "", COLOR.text)
-  sample.seen:SetPoint("TOPLEFT", sample.typed, "BOTTOMLEFT", 0, -8)
-  sample.seen:SetPoint("RIGHT", -70, 0)
+  sample.seen:SetPoint("TOPLEFT", 87, -37)
+  sample.seen:SetPoint("BOTTOMRIGHT", -10, 6)
   sample.seen:SetJustifyH("LEFT")
-  sample.seen:SetWordWrap(false)
+  sample.seen:SetJustifyV("TOP")
+  sample.seen:SetWordWrap(true)
   function sample:Refresh()
+    if not db.enabled then
+      return self.seen:SetText("|cffaaaaaaThe voice is off: your messages go out as typed.|r")
+    end
+    if not BT.voices[db.race or false] and not BT.voices[db.class or false] then
+      return self.seen:SetText("|cffaaaaaaPick a race, faction or class voice above.|r")
+    end
     local opts = BT.Options()
     opts.names = nil
     local typed = input:GetText()
     if type(typed) ~= "string" or not typed:find("%S") then typed = SAMPLE end
-    self.seen:SetText("|cffaaaaaaOthers see:|r " .. BT.Rewrite(typed, "SAY", opts))
+    self.seen:SetText(BT.Rewrite(typed, "SAY", opts))
   end
   input:SetScript("OnTextChanged", function(_, userInput) if userInput then sample:Refresh() end end)
   local again = TextButton(sample, "Again", 54, function() sample:Refresh() end)
-  again:SetPoint("RIGHT", -6, 0)
+  again:SetPoint("TOPRIGHT", -8, -6)
+  Tip(again, "Rolls again: words with several versions, and catchphrases, change from message to message.")
   refreshers[#refreshers + 1] = sample
-  return y - 160
+  return y - 226
 end
 
 local function BuildAuto(y)
   local db = BT.db
-  Header(panel, "Auto mode: rewrite what I type in", y)
+  Header(content, "Auto mode: rewrite what I type in", y)
   for index, chatType in ipairs(BT.CHAT_TYPES) do
     local column, row = (index - 1) % 5, math.floor((index - 1) / 5)
-    Check(panel, CHAT_LABELS[chatType], 20 + column * 112, y - 24 - row * 24,
+    Check(content, CHAT_LABELS[chatType], 20 + column * 112, y - 24 - row * 24,
       function() return db.chats[chatType] end, function(v) db.chats[chatType] = v end)
   end
-  local note = Label(panel, "Battle.net whispers are never changed. Hold Ctrl while pressing Enter to send one message as typed.", COLOR.muted)
-  note:SetPoint("TOPLEFT", 20, y - 76)
-  note:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
-  note:SetJustifyH("LEFT")
-  Check(panel, "Show a preview above the chat box", 20, y - 96, function() return db.preview end, function(v) db.preview = v end)
-  Check(panel, "Add catchphrases before or after my message", 300, y - 96, function() return db.extras end, function(v) db.extras = v end)
-  Check(panel, "Keep game words (need, run, boss) plain in party, raid and battleground chat", 20, y - 120,
+  Check(content, "Show a preview above the chat box", 20, y - 80, function() return db.preview end, function(v) db.preview = v end)
+  local plain = Check(content, "Keep game words plain in party, raid and battleground chat", 20, y - 104,
     function() return db.plainGroups end, function(v) db.plainGroups = v end)
-  return y - 154
+  Tip(plain, "Words like need, run, boss and gold stay as typed in group chat. Jargon such as LFM, tank or BRD is always left alone, in every chat.")
+  local note = Label(content, "Battle.net whispers are never changed. Hold Ctrl while pressing Enter to send one message as typed.", COLOR.muted)
+  note:SetPoint("TOPLEFT", 20, y - 130)
+  note:SetPoint("RIGHT", content, "RIGHT", -20, 0)
+  note:SetJustifyH("LEFT")
+  return y - 168
 end
 
 local function BuildWheel(y)
   local db = BT.db
-  Header(panel, "Phrase wheel", y)
-  Check(panel, "Enabled", 20, y - 24, function() return db.wheel end, function(v) db.wheel = v end)
+  Header(content, "Phrase wheel", y)
+  Check(content, "Enabled", 20, y - 24, function() return db.wheel end, function(v) db.wheel = v end)
 
-  Label(panel, "Hold key", COLOR.muted):SetPoint("TOPLEFT", 120, y - 26)
-  local key = TextButton(panel, "", 150, nil)
+  Label(content, "Hold key", COLOR.muted):SetPoint("TOPLEFT", 120, y - 26)
+  local key = TextButton(content, "", 150, nil)
   key:SetPoint("TOPLEFT", 180, y - 21)
   key:RegisterForClicks("AnyUp")
   local function Stop()
@@ -470,26 +509,26 @@ local function BuildWheel(y)
     Stop()
   end)
   key:SetScript("OnHide", Stop)
+  Tip(key, "Click, then press the key to hold for the wheel. Right-click clears it.")
   refreshers[#refreshers + 1] = key
-  Label(panel, "Right-click clears", COLOR.muted):SetPoint("LEFT", key, "RIGHT", 8, 0)
 
-  Label(panel, "Speak in", COLOR.muted):SetPoint("TOPLEFT", 450, y - 26)
-  Dropdown(panel, 90, 505, y - 20, PlainItems(WHEEL_CHATS), function() return db.wheelChat end, function(v) db.wheelChat = v end)
-  return y - 60
+  Label(content, "Speak in", COLOR.muted):SetPoint("TOPLEFT", 410, y - 26)
+  Dropdown(content, 100, 460, y - 20, PlainItems(WHEEL_CHATS), function() return db.wheelChat end, function(v) db.wheelChat = v end)
+  return y - 62
 end
 
 local function BuildAutocorrect(y)
-  Header(panel, "Autocorrect", y)
-  local check = Check(panel, "Fix my spelling first", 20, y - 24,
+  Header(content, "Autocorrect", y)
+  local check = Check(content, "Fix my spelling first", 20, y - 24,
     function() local state = BT.AutocorrectState() return state and state.enabled end,
     function(v) BT.SetAutocorrect(v) end)
-  local note = Label(panel, "", COLOR.muted)
+  local note = Label(content, "", COLOR.muted)
   note:SetPoint("TOPLEFT", 190, y - 26)
-  note:SetPoint("RIGHT", panel, "RIGHT", -20, 0)
+  note:SetPoint("RIGHT", content, "RIGHT", -20, 0)
   note:SetJustifyH("LEFT")
-  local warning = Label(panel, "Autocorrect Forever's own accent is on, so messages get two accents.", COLOR.gold)
-  warning:SetPoint("TOPLEFT", 20, y - 62)
-  local fix = TextButton(panel, "Turn it off", 90, function()
+  local warning = Label(content, "Autocorrect Forever's own accent is on, so messages get two accents.", COLOR.gold)
+  warning:SetPoint("TOPLEFT", 20, y - 54)
+  local fix = TextButton(content, "Turn it off", 90, function()
     local command = SlashCmdList and SlashCmdList.AUTOCORRECTFOREVER
     if type(command) == "function" then pcall(command, "accent off") end
     BT.RefreshOptions()
@@ -509,6 +548,58 @@ local function BuildAutocorrect(y)
   return y - 80
 end
 
+--- The player's own words. Last on the panel, as it grows with the list.
+local function BuildKept(y)
+  Header(content, "Kept words", y)
+  local input
+  local function Add()
+    local word = input:GetText()
+    if BT.Keep(word, true) then input:SetText("") end
+    BT.RefreshOptions()
+  end
+  input = Input(content, Add)
+  input:SetSize(170, 22)
+  input:SetPoint("TOPLEFT", 20, y - 22)
+  local add = TextButton(content, "Keep", 60, Add)
+  add:SetPoint("LEFT", input, "RIGHT", 6, 0)
+  local note = Label(content, "A name or word of your own, left exactly as typed.", COLOR.muted)
+  note:SetPoint("LEFT", add, "RIGHT", 10, 0)
+  local empty = Label(content, "Nothing kept yet. Game terms such as LFM, tank and BRD are already left alone.", COLOR.muted)
+  empty:SetPoint("TOPLEFT", 20, y - 56)
+
+  local chips = {}
+  local section = {}
+  function section:Refresh()
+    local words = BT.KeptWords()
+    for _, chip in ipairs(chips) do chip:Hide() end
+    local limit = (tonumber(content:GetWidth()) or 600) - 20
+    local x, row = 20, 0
+    for index, word in ipairs(words) do
+      local chip = chips[index]
+      if not chip then
+        chip = TextButton(content, "", 10, nil)
+        Tip(chip, "Click to stop keeping this word.")
+        chips[index] = chip
+      end
+      chip.label:SetText(word .. "  |cffaaaaaax|r")
+      local width = (tonumber(chip.label:GetStringWidth()) or 60) + 18
+      if x + width > limit and x > 20 then x, row = 20, row + 1 end
+      chip:SetWidth(width)
+      chip:ClearAllPoints()
+      chip:SetPoint("TOPLEFT", x, y - 52 - row * 26)
+      chip:SetScript("OnClick", function()
+        BT.Keep(word, false)
+        BT.RefreshOptions()
+      end)
+      chip:Show()
+      x = x + width + 6
+    end
+    empty:SetShown(#words == 0)
+    SetContentHeight(-(y - 52 - (row + 1) * 26) + 14)
+  end
+  refreshers[#refreshers + 1] = section
+end
+
 --- Builds the panel and registers it with the game's settings. Safe to call twice.
 function BT.BuildOptions()
   if panel or not BT.db then return end
@@ -526,13 +617,58 @@ function BT.BuildOptions()
   local version = Label(panel, getMetadata and ("v" .. tostring(getMetadata(ADDON, "Version"))) or "", COLOR.muted)
   version:SetPoint("TOPRIGHT", -18, -18)
 
-  local y = -48
+  -- The sections sit in a frame that scrolls with the mouse wheel, so nothing is cut off when
+  -- the game gives the panel less height than they need. A slim bar at the right shows where.
+  local scroll = CreateFrame("ScrollFrame", nil, panel)
+  scroll:SetPoint("TOPLEFT", 0, -44)
+  scroll:SetPoint("BOTTOMRIGHT", -10, 6)
+  content = CreateFrame("Frame", nil, scroll)
+  content:SetSize(600, 600)
+  scroll:SetScrollChild(content)
+  local bar = panel:CreateTexture(nil, "OVERLAY")
+  bar:SetTexture(WHITE)
+  bar:SetVertexColor(COLOR.bronze[1], COLOR.bronze[2], COLOR.bronze[3], 0.9)
+  bar:SetWidth(3)
+  bar:Hide()
+  local function ScrollTo(to)
+    local view, whole = tonumber(scroll:GetHeight()) or 0, tonumber(content:GetHeight()) or 0
+    local range = math.max(0, whole - view)
+    to = math.max(0, math.min(range, tonumber(to) or 0))
+    scroll:SetVerticalScroll(to)
+    bar:SetShown(range > 0)
+    if range > 0 then
+      local size = math.max(24, view * view / whole)
+      bar:SetHeight(size)
+      bar:ClearAllPoints()
+      bar:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", 6, -(view - size) * to / range)
+    end
+  end
+  SetContentHeight = function(height)
+    content:SetHeight(height)
+    ScrollTo(scroll:GetVerticalScroll())
+  end
+  scroll:EnableMouseWheel(true)
+  scroll:SetScript("OnMouseWheel", function(self, delta)
+    ClosePopup()
+    ScrollTo((tonumber(self:GetVerticalScroll()) or 0) - delta * 40)
+  end)
+  scroll:SetScript("OnSizeChanged", function(self, width)
+    if tonumber(width) and width > 0 then content:SetWidth(width) end
+    BT.RefreshOptions()
+  end)
+
+  local y = -6
   y = BuildVoice(y)
   y = BuildAuto(y)
   y = BuildWheel(y)
-  BuildAutocorrect(y)
+  y = BuildAutocorrect(y)
+  BuildKept(y)
 
-  panel:SetScript("OnShow", BT.RefreshOptions)
+  panel:SetScript("OnShow", function()
+    local width = tonumber(scroll:GetWidth())
+    if width and width > 0 then content:SetWidth(width) end
+    BT.RefreshOptions()
+  end)
   panel:SetScript("OnHide", ClosePopup)
 
   if Settings and Settings.RegisterCanvasLayoutCategory then

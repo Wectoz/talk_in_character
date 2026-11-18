@@ -80,6 +80,25 @@ local function TellAutocorrect(command)
   if type(other) == "function" then pcall(other, command) end
 end
 
+--- Keeps (or stops keeping) one word as typed. Returns the word as stored, or nil if `word`
+--- is not a single word.
+function BT.Keep(word, on)
+  word = type(word) == "string" and word:lower():match("^%s*([%w\128-\255]+)%s*$")
+  if not word then return nil end
+  BT.db.keep[word] = on and true or nil
+  BT.keepStamp = (BT.keepStamp or 0) + 1
+  TellAutocorrect((on and "keep " or "forget ") .. word)
+  return word
+end
+
+--- The kept words, in order.
+function BT.KeptWords()
+  local words = {}
+  for word in pairs(BT.db.keep) do words[#words + 1] = word end
+  table.sort(words)
+  return words
+end
+
 SlashCmdList.TALKINCHARACTER = function(input)
   local db = BT.db
   local verb, rest = (input or ""):lower():match("^%s*(%S*)%s*(.-)%s*$")
@@ -95,15 +114,15 @@ SlashCmdList.TALKINCHARACTER = function(input)
   elseif STRENGTHS[verb] then
     db.strength = STRENGTHS[verb]
     BT.Print("strength: " .. verb)
-  elseif (verb == "keep" or verb == "forget") and rest:find("^[%w\128-\255]+$") then
-    db.keep[rest] = verb == "keep" or nil
-    BT.keepStamp = (BT.keepStamp or 0) + 1
-    TellAutocorrect(verb .. " " .. rest)
-    BT.Print(verb == "keep" and (rest .. " will be left as typed.") or (rest .. " is no longer kept."))
+  elseif verb == "keep" or verb == "forget" then
+    local word = BT.Keep(rest, verb == "keep")
+    if not word then
+      BT.Print("One word at a time: /tic " .. verb .. " <word>")
+    else
+      BT.Print(verb == "keep" and (word .. " will be left as typed.") or (word .. " is no longer kept."))
+    end
   elseif verb == "kept" then
-    local words = {}
-    for word in pairs(db.keep) do words[#words + 1] = word end
-    table.sort(words)
+    local words = BT.KeptWords()
     BT.Print(#words > 0 and ("kept words: " .. table.concat(words, ", ")) or "no kept words. /tic keep <word> adds one.")
   elseif verb == "" and BT.OpenOptions then
     return BT.OpenOptions()
